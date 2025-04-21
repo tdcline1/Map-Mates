@@ -5,11 +5,8 @@ from .models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(
-        queryset=get_user_model().objects.all(), slug_field="username"
-    )
+    author = serializers.SlugRelatedField(read_only=True, slug_field="username")
 
     class Meta:
         model = Post
         fields = ("id", "author", "title", "body", "created_at")
-        extra_kwargs = {"author": {"read_only": True}}
