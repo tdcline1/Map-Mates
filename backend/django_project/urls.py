@@ -5,10 +5,16 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from accounts.views import CreateUserView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("posts.urls")),
+    # User management paths
+    path("api/user/register/", CreateUserView.as_view(), name="register"),
+    path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api/v1/users/", include("accounts.urls")),
     path("api-auth/", include("rest_framework.urls")),
     # Dynamic API Schema and Docuemntation Routes
