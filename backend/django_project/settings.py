@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Third-Party Apps
     "rest_framework",
     "corsheaders",
+    "drf_spectacular",
     # Local Apps
     "accounts",
     "posts",
@@ -134,6 +135,14 @@ REST_FRAMEWORK = {  # new
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+
+# API schema and documentation settings
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Map Mates API",
+    "DESCRIPTION": "Share your travel experiences",
+    "VERSION": "1.0.0",
+}
