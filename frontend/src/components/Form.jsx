@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 import '../styles/Form.css';
 import LoadingIndicator from './LoadingIndicator';
 
-function Form({ route, method }) {
+function Form({ setIsAuthenticated, route, method }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ function Form({ route, method }) {
       if (method === 'login') {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+        setIsAuthenticated(true);
         navigate('/');
       } else {
         navigate('/login');

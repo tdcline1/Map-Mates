@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Posts from './pages/Posts';
 import NotFound from './pages/NotFound';
-import ProtectedRoute from './components/ProtectedRoute';
+// import ProtectedRoute from './components/ProtectedRoute';
 
 function RegisterAndLogout() {
   localStorage.clear();
@@ -42,7 +42,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={<Login setIsAuthenticated={setIsAuthenticated} />}
+          />
           <Route path="/posts" element={<Posts />} />
           <Route path="/register" element={<RegisterAndLogout />} />
           <Route path="*" element={<NotFound />} />
