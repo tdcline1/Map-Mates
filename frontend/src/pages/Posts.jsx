@@ -3,7 +3,7 @@ import api from '../api';
 import Post from '../components/Post';
 import '../styles/Home.css';
 
-function Home() {
+function Posts() {
   const [posts, setPosts] = useState([]);
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
@@ -81,4 +81,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Posts;

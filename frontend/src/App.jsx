@@ -1,8 +1,15 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Home from './pages/Home';
+import Posts from './pages/Posts';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -18,22 +25,23 @@ function RegisterAndLogout() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/register" element={<RegisterAndLogout />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <div className="app">
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/register" element={<RegisterAndLogout />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        {/* TODO <Footer /> */}
+      </div>
+    </Router>
   );
 }
 
