@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './pages/Login';
@@ -23,7 +18,7 @@ function App() {
     !!localStorage.getItem('access')
   );
   const [userName, setUserName] = useState('Thomas');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('access');
@@ -33,30 +28,28 @@ function App() {
     // localStorage.removeItem('userId');
     setIsAuthenticated(false);
     setUserName('');
-    // navigate('/');
+    navigate('/');
   };
 
   return (
-    <Router>
-      <>
-        <Navbar
-          isAuthenticated={isAuthenticated}
-          userName={userName}
-          onLogout={handleLogout}
-        />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/posts" element={<Posts />} />
-            <Route path="/register" element={<RegisterAndLogout />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        {/* TODO <Footer /> */}
-      </>
-    </Router>
+    <>
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        userName={userName}
+        onLogout={handleLogout}
+      />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/register" element={<RegisterAndLogout />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      {/* TODO <Footer /> */}
+    </>
   );
 }
 
