@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     # Third-Party Apps
     "rest_framework",
     "corsheaders",
-    "drf_spectacular",
+    # "drf_spectacular", temporarily commented out to increase server start speed
     # Local Apps
     "accounts",
     "posts",
@@ -132,6 +132,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# This is default but will be changed when using s3. I made it explicit here:
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
