@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from .models import Post
+from .models import Place
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PlaceSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(read_only=True, slug_field="username")
 
     class Meta:
-        model = Post
-        fields = ("id", "author", "title", "body", "created_at")
+        model = Place
+        fields = ("id", "author", "name", "description", "created_at")

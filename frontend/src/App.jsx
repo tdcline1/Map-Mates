@@ -4,7 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Posts from './pages/Posts';
+import Places from './pages/Places';
 import NotFound from './pages/NotFound';
 // import ProtectedRoute from './components/ProtectedRoute';
 
@@ -46,7 +46,7 @@ function App() {
             path="/login"
             element={<Login setIsAuthenticated={setIsAuthenticated} />}
           />
-          <Route path="/posts" element={<Posts />} />
+          <Route path="/places" element={<Places />} />
           <Route path="/register" element={<RegisterAndLogout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -14,7 +14,7 @@ const Navbar = ({ isAuthenticated, userName, onLogout }) => {
         <Link to="/map" className="nav-link">
           Map
         </Link>
-        <Link to="/posts" className="nav-link">
+        <Link to="/places" className="nav-link">
           Top Hikes
         </Link>
         <Link to="/top-cities" className="nav-link">

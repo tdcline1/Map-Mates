@@ -1,13 +1,13 @@
 from rest_framework import generics, permissions
 
-from .models import Post
+from .models import Place
 from .permissions import IsAuthorOrReadOnly
-from .serializers import PostSerializer
+from .serializers import PlaceSerializer
 
 
-class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+class PlaceList(generics.ListCreateAPIView):
+    queryset = Place.objects.all()
+    serializer_class = PlaceSerializer
 
     def perform_create(self, serializer):
         if serializer.is_valid():
@@ -16,12 +16,12 @@ class PostList(generics.ListCreateAPIView):
             print(serializer.errors)
 
 
-class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Place.objects.all()
+    serializer_class = PlaceSerializer
     permission_classes = [IsAuthorOrReadOnly]
 
     # Not sure we need this becuase of permission
     def get_queryset(self):
         user = self.request.user
-        return Post.objects.filter(author=user)
+        return Place.objects.filter(author=user)
