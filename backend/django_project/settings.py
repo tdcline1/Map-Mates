@@ -138,6 +138,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # This is default but will be changed when using s3. I made it explicit here:
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
+MAX_IMAGE_UPLOAD_SIZE = 5 * 1024 * 1024
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
