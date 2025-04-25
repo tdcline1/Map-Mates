@@ -8,7 +8,7 @@ function Place({ place, onDelete }) {
       <p className="note-title">{place.name}</p>
       <p className="note-content">{place.description}</p>
       <p className="note-date">{formattedDate}</p>
-      {place.thumbnail ? (
+      {place.thumbnail_url ? (
         <img
           src={place.thumbnail_url}
           alt={`${place.name} thumbnail`}
