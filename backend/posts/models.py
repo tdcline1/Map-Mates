@@ -1,7 +1,11 @@
 from django.conf import settings
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
+from django.core.validators import (
+    FileExtensionValidator,
+    MinValueValidator,
+    MaxValueValidator,
+)
 
 
 class Place(models.Model):
@@ -12,6 +16,13 @@ class Place(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         related_name="places",
+    )
+    rating = models.DecimalField(
+        max_digits=2,
+        decimal_places=1,
+        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
+        null=True,
+        blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -52,6 +63,7 @@ class PlaceImage(models.Model):
         ],
     )
     is_thumbnail = models.BooleanField(default=False)
+    caption = models.CharField(max_length=100, blank=True)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:

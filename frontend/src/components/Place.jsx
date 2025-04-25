@@ -8,17 +8,15 @@ function Place({ place, onDelete }) {
       <p className="note-title">{place.name}</p>
       <p className="note-content">{place.description}</p>
       <p className="note-date">{formattedDate}</p>
-      {place.thumbnail_url ? (
+      {place.thumbnail_url && (
         <img
           src={place.thumbnail_url}
           alt={`${place.name} thumbnail`}
           className="place-thumbnail"
         />
-      ) : (
-        <p>place.thumbnail DNE</p>
       )}
       <button className="delete-button" onClick={() => onDelete(place.id)}>
-        remove
+        Remove
       </button>
     </div>
   );
