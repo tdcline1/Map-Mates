@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  Link,
+} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Places from './pages/Places';
 import NotFound from './pages/NotFound';
+import Map from './components/Map';
 // import ProtectedRoute from './components/ProtectedRoute';
 
 function RegisterAndLogout() {
@@ -19,6 +26,10 @@ function App() {
   );
   const [userName, setUserName] = useState('Thomas');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const mapPath = '/map';
+  const isMapPathActive = location.pathname === mapPath;
 
   const handleLogout = () => {
     localStorage.removeItem('access');
@@ -38,6 +49,8 @@ function App() {
         userName={userName}
         onLogout={handleLogout}
       />
+      <Map shouldBeVisible={isMapPathActive} />
+
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
