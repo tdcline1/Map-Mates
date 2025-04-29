@@ -35,8 +35,20 @@ function Map({ shouldBeVisible }) {
     display: shouldBeVisible ? 'block' : 'none',
   };
 
+  const handleButtonClick = () => {
+    mapRef.current.flyTo({
+      center: [22.1194, 51.9013],
+      zoom: 2.54,
+    });
+  };
+
   return (
-    <div ref={mapContainerRef} className="map-container" style={mapStyle} />
+    <>
+      <button className="reset-button" onClick={handleButtonClick}>
+        Europe
+      </button>
+      <div ref={mapContainerRef} className="map-container" style={mapStyle} />
+    </>
   );
 }
 
