@@ -61,6 +61,7 @@ function App() {
           />
           <Route path="/places" element={<Places />} />
           <Route path="/register" element={<RegisterAndLogout />} />
+          <Route path="/map" element={<div />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
