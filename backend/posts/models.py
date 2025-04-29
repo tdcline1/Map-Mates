@@ -9,8 +9,21 @@ from django.core.validators import (
 
 
 class Place(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    subtitle = models.CharField(max_length=100)
     description = models.TextField()
+    longitude = models.FloatField(
+        validators=[
+            MinValueValidator(-180, message="Longitude must be at least -180."),
+            MaxValueValidator(180, message="Longitude must not exceed 180."),
+        ]
+    )
+    latitude = models.FloatField(
+        validators=[
+            MinValueValidator(-90, message="Latitude must be at least -90."),
+            MaxValueValidator(90, message="Latitude must not exceed 90."),
+        ]
+    )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -20,7 +33,10 @@ class Place(models.Model):
     rating = models.DecimalField(
         max_digits=2,
         decimal_places=1,
-        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
+        validators=[
+            MinValueValidator(0.0, message="Rating must be at least 0."),
+            MaxValueValidator(5.0, message="Rating must not exceed 5."),
+        ],
         null=True,
         blank=True,
     )

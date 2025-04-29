@@ -33,3 +33,25 @@ class PlaceSerializer(serializers.ModelSerializer):
         if value * 2 % 1 != 0:
             raise serializers.ValidationError("Rating must be in increments of .5")
         return value
+
+
+class PlaceGeoJSONSerializer(serializers.ModelSerializer):
+    geometry = serializers.SerializerMethodField()
+    properties = serializers.SerializerMethodField()
+    id = serializers.IntegerField(source="pk")
+
+    class Meta:
+        model = Place
+        fields = ["id", "type", "geometry", "properties"]
+        extra_kwargs = {"type": {"default": "Feature"}}
+
+    def get_geometry(self, obj):
+        return {"type": "Point", "coordinates": [obj.longitude, obj.latitude]}
+
+    def get_properties(self, obj):
+        return {
+            "name": obj.name,
+            "subtitle": obj.subtitle,
+            # 'thumbnail_url': xxx,
+            # 'rating': obj.rating
+        }
