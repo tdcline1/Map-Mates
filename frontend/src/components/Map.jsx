@@ -13,7 +13,7 @@ function Map({ shouldBeVisible }) {
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
 
   useEffect(() => {
-    if (!hasBeenInitialized && mapContainerRef.current) {
+    if (shouldBeVisible && !hasBeenInitialized && mapContainerRef.current) {
       console.log('Initializing map for the first time...');
 
       mapRef.current = new mapboxgl.Map({
@@ -29,7 +29,7 @@ function Map({ shouldBeVisible }) {
 
       setHasBeenInitialized(true);
     }
-  }, [hasBeenInitialized]);
+  }, [shouldBeVisible, hasBeenInitialized]);
 
   const mapStyle = {
     display: shouldBeVisible ? 'block' : 'none',
