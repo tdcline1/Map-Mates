@@ -24,6 +24,15 @@ class Place(models.Model):
             MaxValueValidator(90, message="Latitude must not exceed 90."),
         ]
     )
+    category = models.CharField(
+        max_length=10,
+        choices=[
+            ("nature", "Nature/Hiking"),
+            ("city", "City/Culture"),
+            ("other", "Other"),
+        ],
+        default="other",
+    )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
