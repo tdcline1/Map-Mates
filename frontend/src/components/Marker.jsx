@@ -2,9 +2,14 @@ import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { createPortal } from 'react-dom';
 
-import natureIcon from '../assets/icons/nature_badge.svg';
-import cityIcon from '../assets/icons/buildingswhite.svg';
-import defaultIcon from '../assets/icons/hike_dude.svg';
+// town options
+// import natureIcon from '../assets/icons/city/city.svg';
+// import cityIcon from '../assets/icons/city/ranger-station.svg';
+// import defaultIcon from '../assets/icons/city/city.svg';
+// hike options
+import natureIcon from '../assets/icons/nature/gtrees.svg';
+import cityIcon from '../assets/icons/nature/ghiking_dude.svg';
+import defaultIcon from '../assets/icons/nature/tent-tree.svg';
 
 const Marker = ({ map, feature }) => {
   const { geometry, properties } = feature;
@@ -49,9 +54,12 @@ const Marker = ({ map, feature }) => {
       {createPortal(
         <div
           style={{
-            position: 'relative',
+            position: 'absolute',
+            left: '50%',
+            top: 0,
             width: '30px',
-            tansform: 'translate(-50%, -100%)',
+            height: '30px',
+            transform: 'translate(-50%, -100%) scale(1.2)',
           }}
         >
           <div
@@ -86,7 +94,6 @@ const Marker = ({ map, feature }) => {
                 height="12"
                 style={{
                   transform: 'rotate(-45deg)',
-                  color: getMarkerColor(),
                 }}
               />
             </div>
