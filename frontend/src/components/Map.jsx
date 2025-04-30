@@ -14,6 +14,7 @@ function Map({ shouldBeVisible }) {
   // const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
   const [placeData, setPlaceData] = useState();
+  const [activeFeature, setActiveFeature] = useState();
 
   useEffect(() => {
     if (shouldBeVisible && !hasBeenInitialized && mapContainerRef.current) {
@@ -65,6 +66,10 @@ function Map({ shouldBeVisible }) {
     });
   };
 
+  const handleMarkerClick = (feature) => {
+    setActiveFeature(feature);
+  };
+
   return (
     <>
       <button className="reset-button" onClick={handleButtonClick}>
@@ -75,7 +80,13 @@ function Map({ shouldBeVisible }) {
         placeData &&
         placeData.features?.map((feature) => {
           return (
-            <Marker key={feature.id} map={mapRef.current} feature={feature} />
+            <Marker
+              key={feature.id}
+              map={mapRef.current}
+              feature={feature}
+              isActive={activeFeature?.id === feature.id}
+              onClick={handleMarkerClick}
+            />
           );
         })}
     </>
