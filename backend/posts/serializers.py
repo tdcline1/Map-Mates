@@ -39,11 +39,11 @@ class PlaceGeoJSONSerializer(serializers.ModelSerializer):
     geometry = serializers.SerializerMethodField()
     properties = serializers.SerializerMethodField()
     id = serializers.IntegerField(source="pk")
+    type = serializers.CharField(default="Feature", read_only=True)
 
     class Meta:
         model = Place
         fields = ["id", "type", "geometry", "properties"]
-        extra_kwargs = {"type": {"default": "Feature"}}
 
     def get_geometry(self, obj):
         return {"type": "Point", "coordinates": [obj.longitude, obj.latitude]}
