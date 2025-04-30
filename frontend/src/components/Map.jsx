@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import api from '../api';
+import Marker from './Marker';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/Map.css';
@@ -70,6 +71,13 @@ function Map({ shouldBeVisible }) {
         Europe
       </button>
       <div ref={mapContainerRef} className="map-container" style={mapStyle} />
+      {mapRef.current &&
+        placeData &&
+        placeData.features?.map((feature) => {
+          return (
+            <Marker key={feature.id} map={mapRef.current} feature={feature} />
+          );
+        })}
     </>
   );
 }
