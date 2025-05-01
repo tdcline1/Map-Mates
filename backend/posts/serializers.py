@@ -54,5 +54,5 @@ class PlaceGeoJSONSerializer(serializers.ModelSerializer):
             "subtitle": obj.subtitle,
             "category": obj.category,
             # 'thumbnail_url': xxx,
-            # 'rating': obj.rating
+            "rating": obj.rating,
         }

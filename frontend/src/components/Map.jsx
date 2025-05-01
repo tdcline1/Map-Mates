@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import api from '../api';
 import Marker from './Marker';
+import Popup from './Popup';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/Map.css';
@@ -89,6 +90,9 @@ function Map({ shouldBeVisible }) {
             />
           );
         })}
+      {mapRef.current && (
+        <Popup map={mapRef.current} activeFeature={activeFeature} />
+      )}
     </>
   );
 }
