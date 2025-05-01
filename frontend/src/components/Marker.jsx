@@ -11,7 +11,7 @@ import natureIcon from '../assets/icons/nature/gtrees.svg';
 import cityIcon from '../assets/icons/nature/ghiking_dude.svg';
 import defaultIcon from '../assets/icons/nature/tent-tree.svg';
 
-const Marker = ({ map, feature }) => {
+const Marker = ({ map, feature, isActive, onClick }) => {
   const { geometry, properties } = feature;
 
   const markerRef = useRef();
@@ -53,6 +53,7 @@ const Marker = ({ map, feature }) => {
     <>
       {createPortal(
         <div
+          onClick={() => onClick(feature)}
           style={{
             position: 'absolute',
             left: '50%',
@@ -64,13 +65,16 @@ const Marker = ({ map, feature }) => {
         >
           <div
             style={{
+              //   backgroundColor: isActive ? '#333' : getMarkerColor(),
               backgroundColor: getMarkerColor(),
               borderRadius: '50% 50% 0 50%',
               width: '100%',
               height: '100%',
               transform: 'rotate(45deg)',
               position: 'relative',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+              boxShadow: isActive
+                ? '0 2px 6px rgb(241, 244, 63)'
+                : '0 2px 6px rgba(0,0,0,0.3)',
             }}
           >
             <div
