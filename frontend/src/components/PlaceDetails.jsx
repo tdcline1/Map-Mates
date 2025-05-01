@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import api from '../api';
 
-const PlaceDetail = (place_id) => {
+const PlaceDetails = (place_id) => {
   const [place, setPlace] = useState();
 
   useEffect(() => {
@@ -29,4 +29,4 @@ const PlaceDetail = (place_id) => {
   );
 };
 
-export default PlaceDetail;
+export default PlaceDetails;
