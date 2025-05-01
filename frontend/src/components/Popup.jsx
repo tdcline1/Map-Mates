@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import mapboxgl from 'mapbox-gl';
+import { Rating } from 'react-simple-star-rating';
 
 const Popup = ({ map, activeFeature }) => {
   const popupRef = useRef();
@@ -50,7 +51,14 @@ const Popup = ({ map, activeFeature }) => {
                 <td>
                   <strong>Rating:</strong>
                 </td>
-                <td>{activeFeature?.properties.rating}</td>
+                <td>
+                  <Rating
+                    readonly
+                    initialValue={activeFeature?.properties.rating}
+                    size={20}
+                    allowFraction
+                  />
+                </td>
               </tr>
               <tr>
                 <td>thumbnail_url placeholder</td>
