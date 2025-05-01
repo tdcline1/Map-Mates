@@ -33,6 +33,9 @@ const Popup = ({ map, activeFeature }) => {
     <>
       {createPortal(
         <div className="portal-content">
+          {activeFeature?.properties.thumbnail_url ? (
+            <img src={activeFeature?.properties.thumbnail_url} width="100%" />
+          ) : null}
           <table>
             <tbody>
               <tr>
@@ -60,14 +63,11 @@ const Popup = ({ map, activeFeature }) => {
                   />
                 </td>
               </tr>
-              {activeFeature?.properties.thumbnail_url ? (
-                <tr>
-                  <img
-                    src={activeFeature?.properties.thumbnail_url}
-                    width="100%"
-                  />
-                </tr>
-              ) : null}
+              <tr>
+                <td colSpan="2" style={{ textAlign: 'center' }}>
+                  Get the full story!
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>,
