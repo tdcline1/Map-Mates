@@ -60,9 +60,14 @@ const Popup = ({ map, activeFeature }) => {
                   />
                 </td>
               </tr>
-              <tr>
-                <td>thumbnail_url placeholder</td>
-              </tr>
+              {activeFeature?.properties.thumbnail_url ? (
+                <tr>
+                  <img
+                    src={activeFeature?.properties.thumbnail_url}
+                    width="100%"
+                  />
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>,
