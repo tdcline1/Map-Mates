@@ -59,6 +59,7 @@ function App() {
             path="/login"
             element={<Login setIsAuthenticated={setIsAuthenticated} />}
           />
+          <Route path="/place/:id" element={<PlaceDetails />} />
           <Route path="/places" element={<Places />} />
           <Route path="/register" element={<RegisterAndLogout />} />
           <Route path="/map" element={<div />} />
