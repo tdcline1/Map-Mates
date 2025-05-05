@@ -8,7 +8,7 @@ from .serializers import PlaceDetailSerializer, PlaceGeoJSONSerializer
 
 class PlaceList(generics.ListCreateAPIView):
     queryset = Place.objects.all()
-    serializer_class = PlaceSerializer
+    serializer_class = PlaceDetailSerializer
 
     def perform_create(self, serializer):
         if serializer.is_valid():
