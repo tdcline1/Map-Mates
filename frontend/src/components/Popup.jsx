@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import mapboxgl from 'mapbox-gl';
 import { Rating } from 'react-simple-star-rating';
 
@@ -66,8 +67,8 @@ const Popup = ({ map, activeFeature }) => {
               <tr>
                 <td colSpan="2" style={{ textAlign: 'center' }}>
                   <Link
-                    to={`/place/${activeFeature.id}`}
-                    state={{ partialPlaceData: activeFeature.properties }}
+                    to={`/place/${activeFeature?.id}`}
+                    state={{ partialPlaceData: activeFeature?.properties }}
                   >
                     See adventure details!
                   </Link>

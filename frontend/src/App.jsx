@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import Places from './pages/Places';
 import NotFound from './pages/NotFound';
 import Map from './components/Map';
+import PlaceDetails from './components/PlaceDetails';
 // import ProtectedRoute from './components/ProtectedRoute';
 
 function RegisterAndLogout() {
