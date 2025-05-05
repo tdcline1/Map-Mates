@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from .models import Place
 from .permissions import IsAuthorOrReadOnly
-from .serializers import PlaceSerializer, PlaceGeoJSONSerializer
+from .serializers import PlaceDetailSerializer, PlaceGeoJSONSerializer
 
 
 class PlaceList(generics.ListCreateAPIView):
@@ -17,15 +17,15 @@ class PlaceList(generics.ListCreateAPIView):
             print(serializer.errors)
 
 
-class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Place.objects.all()
-    serializer_class = PlaceSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Place.objects.select_related("author").prefetch_related("images")
+    serializer_class = PlaceDetailSerializer
+    # permission_classes = [IsAuthorOrReadOnly]
 
     # Not sure we need this becuase of permission
-    def get_queryset(self):
-        user = self.request.user
-        return Place.objects.filter(author=user)
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     return Place.objects.filter(author=user)
 
 
 class PlaceGeoJSONView(generics.ListAPIView):
