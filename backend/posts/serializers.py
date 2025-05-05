@@ -1,30 +1,32 @@
 from rest_framework import serializers
-from .models import Place
+from .models import Place, PlaceImage
 
 
-class PlaceSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(read_only=True, slug_field="username")
-    thumbnail_url = serializers.SerializerMethodField()
+class PlaceImageSerializer(serializers.ModelSerializer):
+    url = serializers.ImageField(source="image", read_only=True)
+
+    class Meta:
+        model = PlaceImage
+        fields = ["id", "url", "caption"]
+
+
+class PlaceDetailSerializer(serializers.ModelSerializer):
+    images = PlaceImageSerializer(many=True, read_only=True)
+    author = serializers.CharField(source="author.username", read_only=True)
 
     class Meta:
         model = Place
         fields = (
             "id",
-            "author",
             "name",
+            "subtitle",
             "description",
-            "created_at",
-            "thumbnail_url",
             "rating",
+            "author",
+            "images",
         )
 
-    def get_thumbnail_url(self, place):
-        thumbnail = place.get_thumbnail()
-        if thumbnail and thumbnail.image:
-            request = self.context.get("request")
-            return request.build_absolute_uri(thumbnail.image.url)
-        return None
-
+    # not sure this is needed... see when i implement creation
     def validate_rating(self, value):
         if value is None:
             return value
