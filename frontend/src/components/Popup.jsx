@@ -66,10 +66,7 @@ const Popup = ({ map, activeFeature }) => {
               </tr>
               <tr>
                 <td colSpan="2" style={{ textAlign: 'center' }}>
-                  <Link
-                    to={`/place/${activeFeature?.id}`}
-                    state={{ partialPlaceData: activeFeature?.properties }}
-                  >
+                  <Link to={`/place/${activeFeature?.id}`}>
                     See adventure details!
                   </Link>
                 </td>
