@@ -73,7 +73,11 @@ function Map({ shouldBeVisible }) {
 
   return (
     <>
-      <button className="reset-button" onClick={handleButtonClick}>
+      <button
+        className="reset-button"
+        onClick={handleButtonClick}
+        style={mapStyle}
+      >
         Europe
       </button>
       <div ref={mapContainerRef} className="map-container" style={mapStyle} />
