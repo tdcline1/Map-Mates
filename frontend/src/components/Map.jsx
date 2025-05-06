@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import api from '../api';
 import Marker from './Marker';
 import Popup from './Popup';
+import MapControls from './MapControls';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/Map.css';
@@ -60,26 +61,15 @@ function Map({ shouldBeVisible }) {
     display: shouldBeVisible ? 'block' : 'none',
   };
 
-  const handleButtonClick = () => {
-    mapRef.current.flyTo({
-      center: [22.1194, 51.9013],
-      zoom: 2.54,
-    });
-  };
-
   const handleMarkerClick = (feature) => {
     setActiveFeature(feature);
   };
 
   return (
     <>
-      <button
-        className="reset-button"
-        onClick={handleButtonClick}
-        style={mapStyle}
-      >
-        Europe
-      </button>
+      {shouldBeVisible && mapRef.current && hasBeenInitialized && (
+        <MapControls map={mapRef.current} />
+      )}
       <div ref={mapContainerRef} className="map-container" style={mapStyle} />
       {mapRef.current &&
         placeData &&
