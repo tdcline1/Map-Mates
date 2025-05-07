@@ -84,6 +84,10 @@ function Map({ shouldBeVisible }) {
     setIsAddingPlace(false);
   };
 
+  const handleCloseForm = () => {
+    setIsShowingForm(false);
+  };
+
   return (
     <>
       <div ref={mapContainerRef} className="map-container" style={mapStyle} />
@@ -97,15 +101,14 @@ function Map({ shouldBeVisible }) {
         <AddPlaceMarker
           map={mapRef.current}
           onSetLocation={handleSetLocation}
-          onCancel={handleCancelAddPin}
+          onClose={handleCancelAddPin}
         />
       )}
       {shouldBeVisible && mapRef.current && isShowingForm && (
-        <div className="form-overlay">
-          <div className="add-place-form">
-            <AddPlaceForm coordinates={newPlaceLocation} />
-          </div>
-        </div>
+        <AddPlaceForm
+          coordinates={newPlaceLocation}
+          onClose={handleCloseForm}
+        />
       )}
       {mapRef.current &&
         placeData &&
