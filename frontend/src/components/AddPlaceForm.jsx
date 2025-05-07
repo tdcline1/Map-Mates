@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
+import api from '../api';
 import '../styles/AddPlaceForm.css';
 
 const AddPlaceForm = ({ coordinates }) => {
@@ -21,13 +22,19 @@ const AddPlaceForm = ({ coordinates }) => {
     console.log(inputs);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert(inputs);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    api
+      .post('api/v1/', { inputs })
+      .then((res) => {
+        if (res.status === 201) alert('Place added!');
+        else alert('Failed to add place');
+      })
+      .catch((err) => alert(err));
   };
 
   return (
-    <form action={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <label>
         Place Name:
         <input
