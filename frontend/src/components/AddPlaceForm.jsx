@@ -25,7 +25,7 @@ const AddPlaceForm = ({ coordinates, onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     api
-      .post('api/v1/', { inputs })
+      .post('api/v1/', inputs)
       .then((res) => {
         if (res.status === 201) alert('Place added!');
         else alert('Failed to add place');

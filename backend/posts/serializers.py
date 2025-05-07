@@ -21,8 +21,11 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
             "name",
             "subtitle",
             "description",
-            "rating",
+            "longitude",
+            "latitude",
+            "category",
             "author",
+            "rating",
             "images",
         )
 
