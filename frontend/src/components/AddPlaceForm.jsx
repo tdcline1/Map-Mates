@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
+import '../styles/AddPlaceForm.css';
 
 const AddPlaceForm = ({ coordinates }) => {
   const [inputs, setInputs] = useState({
@@ -65,33 +66,48 @@ const AddPlaceForm = ({ coordinates }) => {
           <option value="other">other</option>
         </select>
       </label>
-      <p>Category: </p>
-      {categories.map((cat) => (
-        <button key={cat} type="button" onClick={handleChange}>
-          {cat}
-        </button>
-      ))}
-      <label>
-        Rating:{' '}
-        <Rating
-          onClick={handleRating}
-          allowFraction
-          showTooltip
-          tooltipArray={[
-            'Terrible',
-            'Terrible+',
-            'Bad',
-            'Bad+',
-            'Average',
-            'Average+',
-            'Great',
-            'Great+',
-            'Awesome',
-            'Awesome+',
-          ]}
-          transition
-        />
-      </label>
+      <div className="form-row">
+        <p>
+          <strong>Category: </strong>
+        </p>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            type="button"
+            name="category"
+            value={cat}
+            className={
+              inputs.category === cat ? 'customButton active' : 'customButton'
+            }
+            onClick={handleChange}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+      <div className="form-row">
+        <label>
+          Rating:{' '}
+          <Rating
+            onClick={handleRating}
+            allowFraction
+            showTooltip
+            tooltipArray={[
+              'Terrible',
+              'Terrible+',
+              'Bad',
+              'Bad+',
+              'Average',
+              'Average+',
+              'Great',
+              'Great+',
+              'Awesome',
+              'Awesome+',
+            ]}
+            transition
+          />
+        </label>
+      </div>
       <button type="submit">Send</button>
     </form>
   );

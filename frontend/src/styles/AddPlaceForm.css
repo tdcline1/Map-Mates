@@ -1,0 +1,27 @@
+.customButton {
+  width: 60px;
+  height: 20px;
+  letter-spacing: 0.5px;
+  background-color: #bbbaba;
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  border: 0.5px solid #000000;
+  border-radius: 0px;
+  cursor: pointer;
+}
+
+.active {
+  background-color: rgb(94, 184, 4);
+  border: 0.5px solid rgb(25, 26, 24);
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 0px; /* or whatever spacing looks good */
+  margin-bottom: 0rem;
+}
+
+.form-row p {
+  margin-right: 8px;
+}
