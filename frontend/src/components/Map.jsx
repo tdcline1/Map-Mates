@@ -87,9 +87,12 @@ function Map({ shouldBeVisible }) {
   return (
     <>
       <div ref={mapContainerRef} className="map-container" style={mapStyle} />
-      {shouldBeVisible && mapRef.current && !isAddingPlace && (
-        <MapControls map={mapRef.current} onAddPin={handleAddPlaceClick} />
-      )}
+      {shouldBeVisible &&
+        mapRef.current &&
+        !isAddingPlace &&
+        !isShowingForm && (
+          <MapControls map={mapRef.current} onAddPin={handleAddPlaceClick} />
+        )}
       {shouldBeVisible && mapRef.current && isAddingPlace && (
         <AddPlaceMarker
           map={mapRef.current}
@@ -98,7 +101,11 @@ function Map({ shouldBeVisible }) {
         />
       )}
       {shouldBeVisible && mapRef.current && isShowingForm && (
-        <AddPlaceForm coordinates={newPlaceLocation} />
+        <div className="form-overlay">
+          <div className="add-place-form">
+            <AddPlaceForm coordinates={newPlaceLocation} />
+          </div>
+        </div>
       )}
       {mapRef.current &&
         placeData &&
