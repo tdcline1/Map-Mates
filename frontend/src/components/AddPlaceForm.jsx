@@ -3,7 +3,7 @@ import { Rating } from 'react-simple-star-rating';
 import api from '../api';
 import '../styles/AddPlaceForm.css';
 
-const AddPlaceForm = ({ coordinates, onClose }) => {
+const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
   const [inputs, setInputs] = useState({
     longitude: coordinates.longitude,
     latitude: coordinates.latitude,
@@ -27,8 +27,10 @@ const AddPlaceForm = ({ coordinates, onClose }) => {
     api
       .post('api/v1/', inputs)
       .then((res) => {
-        if (res.status === 201) alert('Place added!');
-        else alert('Failed to add place');
+        if (res.status === 201) {
+          alert('Place added!');
+          fetchPlaces();
+        } else alert('Failed to add place');
       })
       .catch((err) => alert(err));
     onClose();

@@ -23,6 +23,16 @@ function Map({ shouldBeVisible }) {
   const [isShowingForm, setIsShowingForm] = useState(false);
   const [newPlaceLocation, setNewPlaceLocation] = useState();
 
+  const fetchPlaces = () => {
+    api
+      .get('api/v1/geojson/')
+      .then((res) => res.data)
+      .then((data) => {
+        setPlaceData(data);
+      })
+      .catch((err) => alert(err));
+  };
+
   useEffect(() => {
     if (shouldBeVisible && !hasBeenInitialized && mapContainerRef.current) {
       console.log('Initializing map for the first time...');
@@ -42,15 +52,6 @@ function Map({ shouldBeVisible }) {
       //       console.error(error);
       //     }
       //   };
-      const fetchPlaces = () => {
-        api
-          .get('api/v1/geojson/')
-          .then((res) => res.data)
-          .then((data) => {
-            setPlaceData(data);
-          })
-          .catch((err) => alert(err));
-      };
       fetchPlaces();
 
       mapRef.current.on('load', () => {
@@ -108,6 +109,7 @@ function Map({ shouldBeVisible }) {
         <AddPlaceForm
           coordinates={newPlaceLocation}
           onClose={handleCloseForm}
+          fetchPlaces={fetchPlaces}
         />
       )}
       {mapRef.current &&
