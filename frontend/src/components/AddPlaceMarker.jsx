@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import '../styles/MapControls.css';
 
 const AddPlaceMarker = ({ map, onSetLocation, onCancel }) => {
-  const [coordinates, setCoordinates] = useState(null);
+  const [coordinates, setCoordinates] = useState({});
 
   useEffect(() => {
     const center = map.getCenter();
@@ -15,7 +15,7 @@ const AddPlaceMarker = ({ map, onSetLocation, onCancel }) => {
 
     const onDragEnd = () => {
       const lngLat = marker.getLngLat();
-      setCoordinates([`Longitude: ${lngLat.lng}`, `Latitude: ${lngLat.lat}`]);
+      setCoordinates({ longitude: lngLat.lng, latitude: lngLat.lat });
     };
 
     marker.on('dragend', onDragEnd);
