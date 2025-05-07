@@ -31,6 +31,7 @@ const AddPlaceForm = ({ coordinates, onClose }) => {
         else alert('Failed to add place');
       })
       .catch((err) => alert(err));
+    onClose();
   };
 
   return (

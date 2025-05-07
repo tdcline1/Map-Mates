@@ -3,13 +3,14 @@ import mapboxgl from 'mapbox-gl';
 import { createPortal } from 'react-dom';
 
 // town options
-// import natureIcon from '../assets/icons/city/city.svg';
-// import cityIcon from '../assets/icons/city/ranger-station.svg';
-// import defaultIcon from '../assets/icons/city/city.svg';
+import natureIcon from '../assets/icons/nature/tent-tree.svg';
+import cityIcon from '../assets/icons/city/city.svg';
+import defaultIcon from '../assets/icons/city/ranger-station.svg';
+
 // hike options
-import natureIcon from '../assets/icons/nature/gtrees.svg';
-import cityIcon from '../assets/icons/nature/ghiking_dude.svg';
-import defaultIcon from '../assets/icons/nature/tent-tree.svg';
+// import natureIcon from '../assets/icons/nature/gtrees.svg';
+// import cityIcon from '../assets/icons/nature/ghiking_dude.svg';
+// import defaultIcon from '../assets/icons/nature/tent-tree.svg';
 
 const Marker = ({ map, feature, isActive, onClick }) => {
   const { geometry, properties } = feature;
@@ -41,11 +42,11 @@ const Marker = ({ map, feature, isActive, onClick }) => {
   const getMarkerColor = () => {
     switch (properties.category) {
       case 'nature':
-        return '#4285F4';
+        return 'rgb(11, 220, 39)';
       case 'city':
-        return '#EA4335';
+        return 'rgb(255, 84, 84)';
       default:
-        return 'rgb(26, 173, 45)';
+        return 'rgb(45, 94, 255)';
     }
   };
 
