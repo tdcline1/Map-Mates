@@ -3,6 +3,8 @@ import api from '../api';
 import Marker from './Marker';
 import Popup from './Popup';
 import MapControls from './MapControls';
+import AddPlaceMarker from './AddPlaceMarker';
+import AddPlaceForm from './AddPlaceForm';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/Map.css';
@@ -17,6 +19,9 @@ function Map({ shouldBeVisible }) {
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
   const [placeData, setPlaceData] = useState();
   const [activeFeature, setActiveFeature] = useState();
+  const [isAddingPlace, setIsAddingPlace] = useState(false);
+  const [isShowingForm, setIsShowingForm] = useState(false);
+  const [newPlaceLocation, setNewPlaceLocation] = useState();
 
   useEffect(() => {
     if (shouldBeVisible && !hasBeenInitialized && mapContainerRef.current) {
@@ -65,12 +70,36 @@ function Map({ shouldBeVisible }) {
     setActiveFeature(feature);
   };
 
+  const handleAddPlaceClick = () => {
+    setIsAddingPlace(true);
+  };
+
+  const handleSetLocation = (coordinates) => {
+    setNewPlaceLocation(coordinates);
+    setIsAddingPlace(false);
+    setIsShowingForm(true);
+  };
+
+  const handleCancelAddPin = () => {
+    setIsAddingPlace(false);
+  };
+
   return (
     <>
-      {shouldBeVisible && mapRef.current && hasBeenInitialized && (
-        <MapControls map={mapRef.current} />
-      )}
       <div ref={mapContainerRef} className="map-container" style={mapStyle} />
+      {shouldBeVisible && mapRef.current && !isAddingPlace && (
+        <MapControls map={mapRef.current} onAddPin={handleAddPlaceClick} />
+      )}
+      {shouldBeVisible && mapRef.current && isAddingPlace && (
+        <AddPlaceMarker
+          map={mapRef.current}
+          onSetLocation={handleSetLocation}
+          onCancel={handleCancelAddPin}
+        />
+      )}
+      {shouldBeVisible && mapRef.current && isShowingForm && (
+        <AddPlaceForm coordinates={newPlaceLocation} />
+      )}
       {mapRef.current &&
         placeData &&
         placeData.features?.map((feature) => {

@@ -1,6 +1,6 @@
 import '../styles/MapControls.css';
 
-const MapControls = ({ map }) => {
+const MapControls = ({ map, onAddPin }) => {
   const flyToContinent = (long, lat, zoom) => {
     map.flyTo({ center: [long, lat], zoom: zoom });
   };
@@ -42,7 +42,9 @@ const MapControls = ({ map }) => {
         </button>
       </div>
       <div className="map-controls-group map-controls-top-right">
-        <button className="map-control-button">Add a Place!</button>
+        <button className="map-control-button" onClick={onAddPin}>
+          Add a Place!
+        </button>
       </div>
     </>
   );
