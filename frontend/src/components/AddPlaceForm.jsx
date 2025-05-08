@@ -25,6 +25,13 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
     setInputs((values) => ({ ...values, rating: rate }));
   };
 
+  const addImage = () => {
+    setImages([
+      ...images,
+      { file: null, caption: '', preview: null, is_thumbnail: false },
+    ]);
+  };
+
   const handleImageChange = (index, field, value) => {
     const newImages = [...images];
     if (field === 'file') {
