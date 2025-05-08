@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import api from '../api';
 import '../styles/AddPlaceForm.css';
+import { UNSAFE_mapRouteProperties } from 'react-router-dom';
 
 const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
   const [inputs, setInputs] = useState({
@@ -67,18 +68,37 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
     setImages(newImages);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    api
-      .post('api/v1/', inputs)
-      .then((res) => {
-        if (res.status === 201) {
-          alert('Place added!');
-          fetchPlaces();
-        } else alert('Failed to add place');
-      })
-      .catch((err) => alert(err));
-    onClose();
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    // This approach not taken to avoid iterating over inherited properties
+    // for (let key in inputs) {
+    //     formData.append(key, inputs[key])
+    // }
+    Object.keys(inputs).forEach((key) => {
+      formData.append(key, inputs[key]);
+    });
+    images.forEach((image, index) => {
+      if (image.file) {
+        formData.append(`images[${index}][image]`, image.file);
+        formData.append(`images[${index}][caption]`, image.caption || '');
+        formData.append(`images[${index}][is_thumbnail]`, image.is_thumbnail);
+      }
+    });
+
+    try {
+      const res = await api.post('api/v1', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if (res.status === 201) {
+        alert('Place added!');
+        fetchPlaces();
+        onClose();
+      } else {
+        alert('Failed to add place');
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
   };
 
   return (
