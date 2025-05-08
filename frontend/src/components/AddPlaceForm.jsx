@@ -48,8 +48,7 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
             <input
               type="text"
               name="name"
-              label="Place name:"
-              value={inputs.name || ''}
+              value={inputs.name}
               onChange={handleChange}
               placeholder="ex: New York City"
             />
@@ -128,8 +127,18 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
                 transition
               />
             </label>
+            <label>
+              Pictures:
+              <input
+                type="file"
+                name="images"
+                multiple
+                value={inputs.images}
+                onChange={handleChange}
+              />
+            </label>
           </div>
-          <button type="submit">Send</button>
+          <button type="submit">Send Adventure</button>
         </form>
       </div>
     </div>
