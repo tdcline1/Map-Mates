@@ -13,18 +13,46 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
     category: 'city',
     rating: 0,
   });
+  const [images, setImages] = useState([]);
   const categories = ['nature', 'city', 'other'];
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
     setInputs((values) => ({ ...values, [name]: value }));
-    console.log(inputs);
   };
 
   const handleRating = (rate) => {
     setInputs((values) => ({ ...values, rating: rate }));
-    console.log(inputs);
+  };
+
+  const handleImageChange = (index, field, value) => {
+    const newImages = [...images];
+    if (field === 'file') {
+      const file = value;
+      if (
+        file &&
+        !['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)
+      ) {
+        alert('Only JPG, JPEG, or PNG files are allowed.');
+        return;
+      }
+      if (file && file.size > 5 * 1024 * 1024) {
+        alert('Image size should not exceed 5mb.');
+        return;
+      }
+      newImages[index] = {
+        ...newImages[index],
+        file,
+        preview: URL.createdObjectURL(file),
+      };
+    } else if (field === 'caption') {
+      newImages[index] = { ...newImages[index], caption: value };
+    } else if (field === 'is_thumbnail') {
+      newImages.forEach((img, i) => {
+        img.is_thumbnail = i === index ? value : false;
+      });
+    }
+    setImages(newImages);
   };
 
   const handleSubmit = (e) => {
