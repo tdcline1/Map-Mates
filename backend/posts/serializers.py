@@ -3,15 +3,25 @@ from .models import Place, PlaceImage
 
 
 class PlaceImageSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the PlaceImage model.
+
+    Handles the creation, update and reppressentation of images associated with a Place.
+    Includes fields for image(file) upload, url for frontend access, captioning, and thumbnail designation
+    """
+
+    image = serializers.ImageField(write_only=True)
     url = serializers.ImageField(source="image", read_only=True)
+    caption = serializers.CharField(max_length=100, required=False, allow_blank=True)
+    is_thumbnail = serializers.BooleanField(default=False)
 
     class Meta:
         model = PlaceImage
-        fields = ["id", "url", "caption"]
+        fields = ["id", "image", "url", "caption", "is_thumbnail"]
 
 
 class PlaceDetailSerializer(serializers.ModelSerializer):
-    images = PlaceImageSerializer(many=True, read_only=True)
+    images = PlaceImageSerializer(many=True, required=False)
     author = serializers.CharField(source="author.username", read_only=True)
 
     class Meta:
@@ -29,6 +39,24 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
             "images",
         )
 
+    def create(self, validated_data):
+        """
+        Creates a Place instance and associated PlaceImage instances
+
+        Args:
+            validated_data (dict): A dictionary of validated data from the serializer.
+                                    It should contain fields for the Place model
+                                    and a list of dictionaries under the 'images key
+                                    for creating PlaceImage objects.
+        Returns:
+            place: The newly created Place instance.
+        """
+        images_data = validated_data.pop("images", [])
+        place = Place.objects.create(**validated_data)
+        for image_data in images_data:
+            PlaceImage.objects.create(place=place, **image_data)
+        return place
+
     # not sure this is needed... see when i implement creation
     def validate_rating(self, value):
         if value is None:
@@ -41,6 +69,16 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
 
 
 class PlaceGeoJSONSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Place model, formats the output as a GeoJSON Feature for map display.
+
+    This serialilzer transformss the Place model instances into GeoJSON Feature objects,
+    including feometry (Point based on longitude and latitude) and properties
+    such as name, subtitle, category, thumbnail URL, and rating.
+    This format, as supplemented by its associated view, ensures the data is structured
+    as expected by the mapbox API.
+    """
+
     geometry = serializers.SerializerMethodField()
     properties = serializers.SerializerMethodField()
     id = serializers.IntegerField(source="pk")
