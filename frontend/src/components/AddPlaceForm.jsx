@@ -32,6 +32,11 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
     ]);
   };
 
+  const removeImage = (index) => {
+    const newImages = images.filter((_, i) => i !== index);
+    setImages(newImages);
+  };
+
   const handleImageChange = (index, field, value) => {
     const newImages = [...images];
     if (field === 'file') {
