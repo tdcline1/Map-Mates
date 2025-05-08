@@ -7,6 +7,11 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
   const [inputs, setInputs] = useState({
     longitude: coordinates.longitude,
     latitude: coordinates.latitude,
+    name: '',
+    subtitle: '',
+    description: '',
+    category: 'city',
+    rating: 0,
   });
   const categories = ['nature', 'city', 'other'];
 
