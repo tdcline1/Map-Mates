@@ -11,10 +11,7 @@ class PlaceList(generics.ListCreateAPIView):
     serializer_class = PlaceDetailSerializer
 
     def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
-        else:
-            print(serializer.errors)
+        serializer.save(author=self.request.user)
 
 
 class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
