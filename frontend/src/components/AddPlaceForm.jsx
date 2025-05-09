@@ -27,6 +27,10 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
   };
 
   const addImage = () => {
+    if (images.length >= 10) {
+      alert('Maximum 10 images allowed.');
+      return;
+    }
     setImages([
       ...images,
       { file: null, caption: '', preview: null, is_thumbnail: false },
