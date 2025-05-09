@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import api from '../api';
 import '../styles/AddPlaceForm.css';
-import { UNSAFE_mapRouteProperties } from 'react-router-dom';
 
 const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
   const [inputs, setInputs] = useState({
@@ -70,9 +69,11 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
       });
     }
     setImages(newImages);
+    console.log(images);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const formData = new FormData();
     // This approach not taken to avoid iterating over inherited properties
     // for (let key in inputs) {
@@ -88,9 +89,10 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
         formData.append(`images[${index}][is_thumbnail]`, image.is_thumbnail);
       }
     });
+    console.log(formData);
 
     try {
-      const res = await api.post('api/v1', formData, {
+      const res = await api.post('api/v1/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       if (res.status === 201) {
@@ -111,25 +113,26 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
         <button className="close-button" onClick={onClose}>
           x
         </button>
+        <h2 className="form-title">Share the Adventure!</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            Place Name:
+            Place:
             <input
               type="text"
               name="name"
               value={inputs.name}
               onChange={handleChange}
-              placeholder="ex: New York City"
+              placeholder="ex: Florence, Italy"
             />
           </label>
           <label>
-            Adventure Subtitle:
+            Subtitle:
             <input
               type="text"
               name="subtitle"
-              value={inputs.subtitle || ''}
+              value={inputs.subtitle}
               onChange={handleChange}
-              placeholder="ex: The city that never sleeps"
+              placeholder="ex: Time machine to the Renaissance!"
             />
           </label>
           <label>
@@ -138,20 +141,8 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
               name="description"
               value={inputs.description}
               onChange={handleChange}
-              placeholder="Tell us what you did at this place!"
+              placeholder="Tell us what you liked most about this place!"
             />
-          </label>
-          <label>
-            Category:{' '}
-            <select
-              value={inputs.category}
-              name="category"
-              onChange={handleChange}
-            >
-              <option value="nature">Nature/hiking</option>
-              <option value="city">City/culture</option>
-              <option value="other">other</option>
-            </select>
           </label>
           <div className="form-row">
             <p>
@@ -170,44 +161,92 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
                 }
                 onClick={handleChange}
               >
-                {cat}
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </button>
             ))}
           </div>
           <div className="form-row">
             <label>
-              Rating:{' '}
+              Rating:
               <Rating
                 onClick={handleRating}
                 allowFraction
-                showTooltip
-                tooltipArray={[
-                  'Terrible',
-                  'Terrible+',
-                  'Bad',
-                  'Bad+',
-                  'Average',
-                  'Average+',
-                  'Great',
-                  'Great+',
-                  'Awesome',
-                  'Awesome+',
-                ]}
+                size="28"
                 transition
               />
             </label>
-            <label>
-              Pictures:
-              <input
-                type="file"
-                name="images"
-                multiple
-                value={inputs.images}
-                onChange={handleChange}
-              />
-            </label>
           </div>
-          <button type="submit">Send Adventure</button>
+          <div className="image-section">
+            <h3>Images</h3>
+            {images.map((image, index) => (
+              <div key={index} className="image-entry">
+                <label>
+                  Image {index + 1}:
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png"
+                    onChange={(e) =>
+                      handleImageChange(index, 'file', e.target.files[0])
+                    }
+                  />
+                </label>
+                {image.preview && (
+                  <img
+                    src={image.preview}
+                    alt="Preview"
+                    className="image-preview"
+                  />
+                )}
+                <label>
+                  Caption:
+                  <input
+                    type="text"
+                    value={image.caption}
+                    onChange={(e) =>
+                      handleImageChange(index, 'caption', e.target.value)
+                    }
+                    placeholder="Image caption"
+                    className="image-caption"
+                  />
+                </label>
+                <div className="thumbnail-checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={image.is_thumbnail}
+                      onChange={(e) =>
+                        handleImageChange(
+                          index,
+                          'is_thumbnail',
+                          e.target.checked
+                        )
+                      }
+                    />
+                  </label>
+                  <label htmlFor={`thumbnail-${index}`}>
+                    <span>Set as Thumbnail</span>
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  className="remove-image-button"
+                >
+                  Remove Image
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addImage}
+              className="add-image-button"
+            >
+              Add Image
+            </button>
+          </div>
+          <button type="submit" className="add-image-button">
+            Send Adventure
+          </button>
         </form>
       </div>
     </div>
