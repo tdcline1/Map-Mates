@@ -60,7 +60,7 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
       newImages[index] = {
         ...newImages[index],
         file,
-        preview: URL.createdObjectURL(file),
+        preview: URL.createObjectURL(file),
       };
     } else if (field === 'caption') {
       newImages[index] = { ...newImages[index], caption: value };
