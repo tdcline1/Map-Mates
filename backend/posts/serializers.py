@@ -52,6 +52,7 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
             place: The newly created Place instance.
         """
         images_data = validated_data.pop("images", [])
+        print(images_data, "print statement in the serializer")
         place = Place.objects.create(**validated_data)
         for image_data in images_data:
             PlaceImage.objects.create(place=place, **image_data)

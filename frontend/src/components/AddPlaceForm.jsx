@@ -89,7 +89,7 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
         formData.append(`images[${index}][is_thumbnail]`, image.is_thumbnail);
       }
     });
-    console.log(formData);
+    console.log([...formData.entries()]);
 
     try {
       const res = await api.post('api/v1/', formData, {
