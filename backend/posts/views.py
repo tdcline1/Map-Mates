@@ -33,6 +33,19 @@ class PlaceList(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        images_data = (
+            [
+                {
+                    "image": image_files[i],
+                    "caption": image_captions[i],
+                    "is_thumbnail": image_thumbnails[i] == "true",
+                }
+                for i in range(len(image_files))
+            ]
+            if image_files
+            else []
+        )
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
