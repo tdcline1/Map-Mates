@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 
 from .models import Place
@@ -24,6 +24,14 @@ class PlaceList(generics.ListCreateAPIView):
         image_files = request.FILES.getlist("image_files")
         image_captions = request.data.getlist("image_captions")
         image_thumbnails = request.data.getlist("image_thumbnails")
+
+        if image_files and not (
+            len(image_files) == len(image_captions) == len(image_thumbnails)
+        ):
+            return Response(
+                {"error": "Mismatched nymber of image files, captions, and thumbnails"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
