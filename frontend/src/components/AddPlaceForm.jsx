@@ -85,11 +85,10 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
     images.forEach((image) => {
       if (image.file) {
         formData.append('images_files', image.file);
-        formData.append('images_caption', image.caption || '');
+        formData.append('images_captions', image.caption || '');
         formData.append('images_thumbnails', image.is_thumbnail);
       }
     });
-    console.log([...formData.entries()]);
 
     try {
       const res = await api.post('api/v1/', formData, {

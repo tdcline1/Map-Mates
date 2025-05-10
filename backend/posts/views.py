@@ -29,7 +29,7 @@ class PlaceList(generics.ListCreateAPIView):
             len(image_files) == len(image_captions) == len(image_thumbnails)
         ):
             return Response(
-                {"error": "Mismatched nymber of image files, captions, and thumbnails"},
+                {"error": "Mismatched number of image files, captions, and thumbnails"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
