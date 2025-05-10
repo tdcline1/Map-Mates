@@ -46,6 +46,14 @@ class PlaceList(generics.ListCreateAPIView):
             else []
         )
 
+        serializer_data["images"] = images_data
+        serializer = self.get_serializer(data=serializer_data)
+
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
