@@ -23,6 +23,7 @@ class PlaceImageSerializer(serializers.ModelSerializer):
 class PlaceDetailSerializer(serializers.ModelSerializer):
     images = PlaceImageSerializer(many=True, required=False)
     author = serializers.CharField(source="author.username", read_only=True)
+    rating = serializers.FloatField(min_value=0, max_value=5)
 
     class Meta:
         model = Place
