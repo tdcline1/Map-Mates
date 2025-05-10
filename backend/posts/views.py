@@ -21,9 +21,9 @@ class PlaceList(generics.ListCreateAPIView):
             "rating": request.data.get("rating"),
         }
 
-        image_files = request.FILES.getlist("image_files")
-        image_captions = request.data.getlist("image_captions")
-        image_thumbnails = request.data.getlist("image_thumbnails")
+        image_files = request.FILES.getlist("images_files")
+        image_captions = request.data.getlist("images_captions")
+        image_thumbnails = request.data.getlist("images_thumbnails")
 
         if image_files and not (
             len(image_files) == len(image_captions) == len(image_thumbnails)
