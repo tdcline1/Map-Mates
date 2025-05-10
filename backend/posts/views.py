@@ -10,6 +10,21 @@ class PlaceList(generics.ListCreateAPIView):
     queryset = Place.objects.all()
     serializer_class = PlaceDetailSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer_data = {
+            "name": request.data.get("name"),
+            "subtitle": request.data.get("subtitle"),
+            "description": request.data.get("description"),
+            "longitude": request.data.get("longitude"),
+            "latitude": request.data.get("latitude"),
+            "category": request.data.get("category"),
+            "rating": request.data.get("rating"),
+        }
+
+        image_files = request.FILES.getlist("image_files")
+        image_captions = request.data.getlist("image_captions")
+        image_thumbnails = request.data.getlist("image_thumbnails")
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
