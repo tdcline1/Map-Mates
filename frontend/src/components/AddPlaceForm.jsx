@@ -26,13 +26,14 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
   };
 
   const addImage = () => {
+    const is_first = images.length === 0 ? true : false;
     if (images.length >= 10) {
       alert('Maximum 10 images allowed.');
       return;
     }
     setImages([
       ...images,
-      { file: null, caption: '', preview: null, is_thumbnail: false },
+      { file: null, caption: '', preview: null, is_thumbnail: is_first },
     ]);
   };
 
