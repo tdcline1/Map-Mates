@@ -70,7 +70,6 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
       });
     }
     setImages(newImages);
-    console.log(images);
   };
 
   const handleSubmit = async (e) => {
@@ -120,6 +119,7 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
             <input
               type="text"
               name="name"
+              required
               value={inputs.name}
               onChange={handleChange}
               placeholder="ex: Florence, Italy"
@@ -130,6 +130,7 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
             <input
               type="text"
               name="subtitle"
+              required
               value={inputs.subtitle}
               onChange={handleChange}
               placeholder="ex: Time machine to the Renaissance!"
@@ -139,6 +140,7 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
             Full Description:
             <textarea
               name="description"
+              required
               value={inputs.description}
               onChange={handleChange}
               placeholder="Tell us what you liked most about this place!"
