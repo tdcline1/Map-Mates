@@ -13,6 +13,8 @@ const AddPlaceMarker = ({ map, onSetLocation, onCancel }) => {
       .setLngLat([center.lng, center.lat])
       .addTo(map);
 
+    setCoordinates({ longitude: center.lng, latitude: center.lat });
+
     const onDragEnd = () => {
       const lngLat = marker.getLngLat();
       setCoordinates({ longitude: lngLat.lng, latitude: lngLat.lat });
