@@ -25,6 +25,7 @@ function App() {
       localStorage.setItem('hasVisitedBefore', 'true');
     }
   }, []);
+
   const handleWelcomeClose = () => {
     setActiveOverlay(null);
   };
@@ -37,7 +38,7 @@ function App() {
     setUserName('Guest');
   };
 
-  const handleLogin = (username) => {
+  const handleLoginSuccess = (username) => {
     setIsAuthenticated(true);
     setUserName(username);
     setActiveOverlay(null);
@@ -52,20 +53,34 @@ function App() {
         onLoginClick={() => setActiveOverlay('login')}
         onRegisterClick={() => setActiveOverlay('register')}
       />
-      <Map shouldBeVisible={isMapPathActive} />
+      <Map />
+
+      {activeOverlay === 'welcome' && (
+        <WelcomeOverlay onClose={handleWelcomeClose} />
+      )}
+
+      {activeOverlay === 'login' && (
+        <Login
+          onLoginSuccess={handleLoginSuccess}
+          onClose={() => setActiveOverlay(null)}
+          onRegisterClick={() => setActiveOverlay('register')}
+        />
+      )}
+
+      {activeOverlay === 'register' && (
+        <Register
+          onLoginSuccess={handleLoginSuccess}
+          onClose={() => setActiveOverlay(null)}
+          onLoginClick={() => setActiveOverlay('login')}
+        />
+      )}
 
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<div />} />
           {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
-          <Route
-            path="/login"
-            element={<Login setIsAuthenticated={setIsAuthenticated} />}
-          />
           <Route path="/place/:id" element={<PlaceDetails />} />
           <Route path="/places" element={<Places />} />
-          <Route path="/register" element={<RegisterAndLogout />} />
-          <Route path="/map" element={<div />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
