@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
 import mapboxgl from 'mapbox-gl';
 import { Rating } from 'react-simple-star-rating';
 
-const Popup = ({ map, activeFeature }) => {
+const Popup = ({ map, activeFeature, onShowDetails }) => {
   const popupRef = useRef();
   const contentRef = useRef(document.createElement('div'));
 
@@ -26,7 +25,7 @@ const Popup = ({ map, activeFeature }) => {
 
     popupRef.current
       .setLngLat(activeFeature.geometry.coordinates)
-      .setHTML(contentRef.current.outerHTML)
+      .setDOMContent(contentRef.current)
       .addTo(map);
   }, [activeFeature]);
 
@@ -66,9 +65,9 @@ const Popup = ({ map, activeFeature }) => {
               </tr>
               <tr>
                 <td colSpan="2" style={{ textAlign: 'center' }}>
-                  <Link to={`/place/${activeFeature?.id}`}>
-                    See adventure details!
-                  </Link>
+                  <button onClick={() => onShowDetails(activeFeature)}>
+                    See Adventure Details!
+                  </button>
                 </td>
               </tr>
             </tbody>
