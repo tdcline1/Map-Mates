@@ -30,8 +30,8 @@ function Form({ route, method, onSuccess, onClose }) {
             username,
             password,
           });
-          localStorage.setItem('access', res.data.access);
-          localStorage.setItem('refresh', res.data.refresh);
+          localStorage.setItem('access', loginRes.data.access);
+          localStorage.setItem('refresh', loginRes.data.refresh);
           localStorage.setItem('username', username);
           onSuccess(username);
         } catch (loginError) {
