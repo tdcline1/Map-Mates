@@ -25,6 +25,7 @@ function Form({ route, method, onSuccess, onClose }) {
         onSuccess(username);
       } else {
         try {
+          localStorage.clear();
           const loginRes = await api.post('/api/token/', {
             username,
             password,
