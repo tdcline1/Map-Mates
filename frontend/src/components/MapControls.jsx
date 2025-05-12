@@ -1,8 +1,16 @@
 import '../styles/MapControls.css';
 
-const MapControls = ({ map, onAddPin }) => {
+const MapControls = ({ map, onAddPin, isAuthenticated }) => {
   const flyToContinent = (long, lat, zoom) => {
     map.flyTo({ center: [long, lat], zoom: zoom });
+  };
+
+  const handleClick = () => {
+    if (isAuthenticated) {
+      onAddPin();
+    } else {
+      window.dispatchEvent(new Event('showLoginModal'));
+    }
   };
 
   return (
@@ -42,8 +50,9 @@ const MapControls = ({ map, onAddPin }) => {
         </button>
       </div>
       <div className="map-controls-group map-controls-top-right">
-        <button className="map-control-button" onClick={onAddPin}>
-          Add a Place!
+        <button className="map-control-button" onClick={handleClick}>
+          Add a Place!{' '}
+          {!isAuthenticated && <span className="lock-icon">🔒</span>}
         </button>
       </div>
     </>
