@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
-    if (hasVisitedBefore) {
+    if (!hasVisitedBefore) {
       setActiveOverlay('welcome');
       localStorage.setItem('hasVisitedBefore', 'true');
     }
@@ -35,7 +35,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('access');
     localStorage.removeItem('refresh');
-    localStorage.removeItem('userName');
+    localStorage.removeItem('username');
     setIsAuthenticated(false);
     setUserName('Guest');
   };
