@@ -25,6 +25,9 @@ function App() {
       localStorage.setItem('hasVisitedBefore', 'true');
     }
   }, []);
+  const handleWelcomeClose = () => {
+    setActiveOverlay(null);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('access');
