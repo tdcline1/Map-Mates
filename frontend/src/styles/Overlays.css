@@ -1,0 +1,155 @@
+/* Overlay Styles meant to satisfy form, login, register and welcome*/
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-actions {
+  margin-top: 24px;
+}
+
+.error-message {
+  background-color: #fff1f0;
+  border: 1px solid #ffa39e;
+  color: #cf1322;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.overlay-footer {
+  margin-top: 16px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.text-link {
+  background: none;
+  border: none;
+  color: #1890ff;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* Welcome Overlay Styles */
+.welcome-overlay {
+  text-align: center;
+}
+
+.features-section {
+  text-align: left;
+  margin: 24px 0;
+}
+
+.features-section ul {
+  padding-left: 20px;
+}
+
+.features-section li {
+  margin-bottom: 8px;
+}
+
+/* Map Styles */
+.map-container {
+  position: absolute;
+  top: 64px; /* Adjust based on your navbar height */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* Button Styles */
+.btn {
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #1890ff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #40a9ff;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+}
+
+.btn-outline:hover {
+  background-color: #e6f7ff;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
