@@ -3,12 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Places from './pages/Places';
 import NotFound from './pages/NotFound';
 import Map from './components/Map';
 import WelcomeOverlay from './components/WelcomeOverlay';
-import PlaceDetails from './components/PlaceDetails';
-// import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -86,9 +83,6 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<div />} />
-          {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
-          <Route path="/place/:id" element={<PlaceDetails />} />
-          <Route path="/places" element={<Places />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
