@@ -2,7 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Navbar.css';
 
-const Navbar = ({ isAuthenticated, userName, onLogout }) => {
+const Navbar = ({
+  isAuthenticated,
+  userName,
+  onLogout,
+  onLoginClick,
+  onRegisterClick,
+}) => {
   return (
     <nav className="navbar">
       <div className="nav-left">
@@ -30,12 +36,12 @@ const Navbar = ({ isAuthenticated, userName, onLogout }) => {
           </>
         ) : (
           <>
-            <Link to="/login" className="nav-link">
+            <button className="logout-button" onClick={onLoginClick}>
               Login
-            </Link>
-            <Link to="/register" className="nav-link">
+            </button>
+            <button className="logout-button" onClick={onRegisterClick}>
               Register
-            </Link>
+            </button>
           </>
         )}
       </div>
