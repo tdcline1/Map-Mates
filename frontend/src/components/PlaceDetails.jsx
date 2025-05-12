@@ -1,16 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import api from '../api';
 import { Rating } from 'react-simple-star-rating';
+import '../styles/PlaceDetails.css';
 
-const PlaceDetails = () => {
-  const { id } = useParams();
+const PlaceDetails = ({ feature, onClose }) => {
   const [placeData, setPlaceData] = useState(null);
 
   useEffect(() => {
-    getPlaceData(id);
-  }, [id]);
+    getPlaceData(feature.id);
+  }, [feature.id]);
 
   const getPlaceData = (id) => {
     api
@@ -27,30 +26,35 @@ const PlaceDetails = () => {
   }
 
   return (
-    <div>
-      <h1>{placeData?.name}</h1>
-      {placeData.subtitle && <p>{placeData.subtitle}</p>}
-      {placeData.rating && (
-        <p>
-          Rating:{' '}
-          <Rating
-            readonly
-            initialValue={placeData.rating}
-            size={20}
-            allowFraction
-          />
-        </p>
-      )}
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <button onClick={onClose} className="modal-close">
+          x
+        </button>
+        <h1>{placeData?.name}</h1>
+        {placeData.subtitle && <p>{placeData.subtitle}</p>}
+        {placeData.rating && (
+          <p>
+            Rating:{' '}
+            <Rating
+              readonly
+              initialValue={placeData.rating}
+              size={20}
+              allowFraction
+            />
+          </p>
+        )}
 
-      {placeData.description && <p>{placeData.description}</p>}
-      {placeData.author && <p>Author: {placeData.author}</p>}
-      {placeData.images &&
-        placeData.images.map((image) => (
-          <div key={image.url}>
-            <img src={image.url} width="50%" />
-            <p>{image.caption}</p>
-          </div>
-        ))}
+        {placeData.description && <p>{placeData.description}</p>}
+        {placeData.author && <p>Author: {placeData.author}</p>}
+        {placeData.images &&
+          placeData.images.map((image) => (
+            <div key={image.url}>
+              <img src={image.url} width="50%" />
+              <p>{image.caption}</p>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };
