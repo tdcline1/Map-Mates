@@ -1,3 +1,72 @@
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.error-message {
+  background-color: #fff1f0;
+  border: 1px solid #ffa39e;
+  color: #cf1322;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.overlay-footer {
+  margin-top: 16px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.text-link {
+  background: none;
+  border: none;
+  color: #1890ff;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
 .form-container {
   display: flex;
   flex-direction: column;
