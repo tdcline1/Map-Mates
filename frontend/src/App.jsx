@@ -8,11 +8,6 @@ import Map from './components/Map';
 import PlaceDetails from './components/PlaceDetails';
 // import ProtectedRoute from './components/ProtectedRoute';
 
-function RegisterAndLogout() {
-  localStorage.clear();
-  return <Register />;
-}
-
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem('access')
@@ -35,12 +30,14 @@ function App() {
     localStorage.removeItem('access');
     localStorage.removeItem('refresh');
     localStorage.removeItem('userName');
-    // Optional extras:
-    // localStorage.removeItem('username');
-    // localStorage.removeItem('userId');
     setIsAuthenticated(false);
-    setUserName('');
-    navigate('/');
+    setUserName('Guest');
+  };
+
+  const handleLogin = (username) => {
+    setIsAuthenticated(true);
+    setUserName(username);
+    setActiveOverlay(null);
   };
 
   return (
@@ -49,6 +46,8 @@ function App() {
         isAuthenticated={isAuthenticated}
         userName={userName}
         onLogout={handleLogout}
+        onLoginClick={() => setActiveOverlay('login')}
+        onRegisterClick={() => setActiveOverlay('register')}
       />
       <Map shouldBeVisible={isMapPathActive} />
 
