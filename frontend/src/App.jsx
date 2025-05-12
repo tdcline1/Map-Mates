@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Places from './pages/Places';
 import NotFound from './pages/NotFound';
 import Map from './components/Map';
+import WelcomeOverlay from './components/WelcomeOverlay';
 import PlaceDetails from './components/PlaceDetails';
 // import ProtectedRoute from './components/ProtectedRoute';
 

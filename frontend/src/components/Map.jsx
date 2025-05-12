@@ -11,7 +11,7 @@ import '../styles/Map.css';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-function Map({ shouldBeVisible }) {
+const Map = () => {
   const mapRef = useRef(null);
   const mapContainerRef = useRef(null);
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
@@ -32,7 +32,7 @@ function Map({ shouldBeVisible }) {
   };
 
   useEffect(() => {
-    if (shouldBeVisible && !hasBeenInitialized && mapContainerRef.current) {
+    if (!hasBeenInitialized && mapContainerRef.current) {
       console.log('Initializing map for the first time...');
 
       mapRef.current = new mapboxgl.Map({
@@ -49,11 +49,7 @@ function Map({ shouldBeVisible }) {
 
       setHasBeenInitialized(true);
     }
-  }, [shouldBeVisible, hasBeenInitialized]);
-
-  const mapStyle = {
-    display: shouldBeVisible ? 'block' : 'none',
-  };
+  }, [hasBeenInitialized]);
 
   const handleMarkerClick = (feature) => {
     setActiveFeature(feature);
@@ -79,21 +75,18 @@ function Map({ shouldBeVisible }) {
 
   return (
     <>
-      <div ref={mapContainerRef} className="map-container" style={mapStyle} />
-      {shouldBeVisible &&
-        mapRef.current &&
-        !isAddingPlace &&
-        !isShowingForm && (
-          <MapControls map={mapRef.current} onAddPin={handleAddPlaceClick} />
-        )}
-      {shouldBeVisible && mapRef.current && isAddingPlace && (
+      <div ref={mapContainerRef} className="map-container" />
+      {mapRef.current && !isAddingPlace && !isShowingForm && (
+        <MapControls map={mapRef.current} onAddPin={handleAddPlaceClick} />
+      )}
+      {mapRef.current && isAddingPlace && (
         <AddPlaceMarker
           map={mapRef.current}
           onSetLocation={handleSetLocation}
           onClose={handleCancelAddPin}
         />
       )}
-      {shouldBeVisible && mapRef.current && isShowingForm && (
+      {mapRef.current && isShowingForm && (
         <AddPlaceForm
           coordinates={newPlaceLocation}
           onClose={handleCloseForm}
@@ -118,6 +111,6 @@ function Map({ shouldBeVisible }) {
       )}
     </>
   );
-}
+};
 
 export default Map;
