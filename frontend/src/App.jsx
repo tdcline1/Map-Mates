@@ -1,13 +1,5 @@
-import React, { useState } from 'react';
-import {
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-  Link,
-} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import Home from './components/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Places from './pages/Places';
@@ -25,12 +17,11 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem('access')
   );
-  const [userName, setUserName] = useState('Thomas');
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [userName, setUserName] = useState(
+    localStorage.getItem('username') || 'Guest'
+  );
 
-  const mapPath = '/map';
-  const isMapPathActive = location.pathname === mapPath;
+  const [activeOverlay, setActiveOverlay] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem('access');

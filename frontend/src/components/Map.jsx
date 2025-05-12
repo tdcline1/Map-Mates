@@ -14,8 +14,6 @@ mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 function Map({ shouldBeVisible }) {
   const mapRef = useRef(null);
   const mapContainerRef = useRef(null);
-  // TODO: Uncomment and use isMapLoaded when marker logic (or other post-load logic) is added.
-  // const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
   const [placeData, setPlaceData] = useState();
   const [activeFeature, setActiveFeature] = useState();
@@ -43,20 +41,10 @@ function Map({ shouldBeVisible }) {
         zoom: 2.54,
       });
 
-      //   const fetchPlaces = async () => {
-      //     try {
-      //       const data = await fetch(`api/v1/geojson/`).then((d) => d.json());
-
-      //       setPlaceData(data);
-      //     } catch (error) {
-      //       console.error(error);
-      //     }
-      //   };
       fetchPlaces();
 
       mapRef.current.on('load', () => {
         console.log('Map loaded!');
-        // setIsMapLoaded(true);
       });
 
       setHasBeenInitialized(true);
