@@ -61,7 +61,7 @@ function App() {
         onLoginClick={() => setActiveOverlay('login')}
         onRegisterClick={() => setActiveOverlay('register')}
       />
-      <Map />
+      <Map isAuthenticated={isAuthenticated} />
 
       {activeOverlay === 'welcome' && (
         <WelcomeOverlay onClose={handleWelcomeClose} />

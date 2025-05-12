@@ -11,7 +11,7 @@ import '../styles/Map.css';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-const Map = () => {
+const Map = ({ isAuthenticated }) => {
   const mapRef = useRef(null);
   const mapContainerRef = useRef(null);
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
@@ -77,7 +77,11 @@ const Map = () => {
     <>
       <div ref={mapContainerRef} className="map-container" />
       {mapRef.current && !isAddingPlace && !isShowingForm && (
-        <MapControls map={mapRef.current} onAddPin={handleAddPlaceClick} />
+        <MapControls
+          map={mapRef.current}
+          onAddPin={handleAddPlaceClick}
+          isAuthenticated={isAuthenticated}
+        />
       )}
       {mapRef.current && isAddingPlace && (
         <AddPlaceMarker
