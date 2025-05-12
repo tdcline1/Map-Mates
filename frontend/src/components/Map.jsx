@@ -5,6 +5,7 @@ import Popup from './Popup';
 import MapControls from './MapControls';
 import AddPlaceMarker from './AddPlaceMarker';
 import AddPlaceForm from './AddPlaceForm';
+import PlaceDetails from './PlaceDetails';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/Map.css';
@@ -20,6 +21,7 @@ const Map = ({ isAuthenticated }) => {
   const [isAddingPlace, setIsAddingPlace] = useState(false);
   const [isShowingForm, setIsShowingForm] = useState(false);
   const [newPlaceLocation, setNewPlaceLocation] = useState();
+  const [selectedPlaceDetails, setSelectedPlaceDetails] = useState(null);
 
   const fetchPlaces = () => {
     api
@@ -73,6 +75,14 @@ const Map = ({ isAuthenticated }) => {
     setIsShowingForm(false);
   };
 
+  const handleShowDetails = (feature) => {
+    setSelectedPlaceDetails(feature);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setSelectedPlaceDetails(null);
+  };
+
   return (
     <>
       <div ref={mapContainerRef} className="map-container" />
@@ -111,7 +121,17 @@ const Map = ({ isAuthenticated }) => {
           );
         })}
       {mapRef.current && (
-        <Popup map={mapRef.current} activeFeature={activeFeature} />
+        <Popup
+          map={mapRef.current}
+          activeFeature={activeFeature}
+          onShowDetails={handleShowDetails}
+        />
+      )}
+      {mapRef.current && selectedPlaceDetails && (
+        <PlaceDetails
+          feature={selectedPlaceDetails}
+          onClose={handleCloseDetailsModal}
+        />
       )}
     </>
   );
