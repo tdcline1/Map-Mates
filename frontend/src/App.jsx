@@ -34,6 +34,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('access');
     localStorage.removeItem('refresh');
+    localStorage.removeItem('userName');
     // Optional extras:
     // localStorage.removeItem('username');
     // localStorage.removeItem('userId');
