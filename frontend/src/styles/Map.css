@@ -1,10 +1,10 @@
 .map-container {
-  position: absolute; /* Or relative/fixed depending on layout needs */
+  position: absolute;
   top: 60px; /* Height of  Navbar */
   left: 0;
   right: 0;
   bottom: 0; /* Adjust when i put in Footer */
-  height: calc(100vh - 60px); /* Example: Adjust '60px' to your Navbar height */
+  height: calc(100vh - 60px);
   width: 100%;
   z-index: 0;
 }
