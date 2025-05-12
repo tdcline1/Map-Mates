@@ -26,6 +26,12 @@ function App() {
       setActiveOverlay('welcome');
       localStorage.setItem('hasVisitedBefore', 'true');
     }
+
+    const handleShowLogin = () => {
+      setActiveOverlay('login');
+    };
+    window.addEventListener('showLoginModal', handleShowLogin);
+    return () => window.removeEventListener('showLoginModal', handleShowLogin);
   }, []);
 
   const handleWelcomeClose = () => {
