@@ -1,0 +1,71 @@
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.welcome-overlay {
+  text-align: center;
+}
+
+.features-section {
+  text-align: left;
+  margin: 24px 0;
+}
+
+.features-section ul {
+  padding-left: 20px;
+}
+
+.features-section li {
+  margin-bottom: 8px;
+}
+
+/* Button Styles */
+.btn {
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #1890ff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #40a9ff;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+}
+
+.btn-outline:hover {
+  background-color: #e6f7ff;
+}
