@@ -83,7 +83,7 @@ const Map = () => {
         <AddPlaceMarker
           map={mapRef.current}
           onSetLocation={handleSetLocation}
-          onClose={handleCancelAddPin}
+          onCancel={handleCancelAddPin}
         />
       )}
       {mapRef.current && isShowingForm && (
