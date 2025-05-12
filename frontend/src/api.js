@@ -19,8 +19,11 @@ const isTokenValid = (token) => {
 
 api.interceptors.request.use(
   (config) => {
+    const isPublic = publicEndpoints.some((endpoint) =>
+      config.url.includes(endpoint)
+    );
     const token = localStorage.getItem('access');
-    if (token) {
+    if (token && isTokenValid(token) && !isPublic) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
