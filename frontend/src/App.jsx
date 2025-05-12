@@ -23,6 +23,14 @@ function App() {
 
   const [activeOverlay, setActiveOverlay] = useState(null);
 
+  useEffect(() => {
+    const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+    if (hasVisitedBefore) {
+      setActiveOverlay('welcome');
+      localStorage.setItem('hasVisitedBefore', 'true');
+    }
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('access');
     localStorage.removeItem('refresh');
