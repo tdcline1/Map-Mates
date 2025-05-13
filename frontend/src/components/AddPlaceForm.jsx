@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import api from '../api';
 import '../styles/AddPlaceForm.css';
@@ -72,7 +72,7 @@ const AddPlaceForm = ({
 
   const removeExistingImage = (imageId) => {
     setImagesToDelete([...imagesToDelete, imageId]);
-    setExisitngImages(...existingImages.filter((img) => img.id !== imageId));
+    setExistingImages(...existingImages.filter((img) => img.id !== imageId));
   };
 
   const handleImageChange = (index, field, value) => {
@@ -200,7 +200,9 @@ const AddPlaceForm = ({
         <button className="close-button" onClick={onClose}>
           x
         </button>
-        <h2 className="form-title">Share the Adventure!</h2>
+        <h2 className="form-title">
+          {isEditMode ? 'Edit Adventure' : 'Share the Adventure!'}
+        </h2>
         <form onSubmit={handleSubmit}>
           <label>
             Place:
@@ -260,14 +262,74 @@ const AddPlaceForm = ({
               Rating:
               <Rating
                 onClick={handleRating}
+                initialValue={inputs.rating}
                 allowFraction
                 size="28"
                 transition
               />
             </label>
           </div>
+
+          {/* Existing Images */}
+          {isEditMode && existingImages.length > 0 && (
+            <div className="image-section">
+              <h3>Existing Images</h3>
+              {existingImages
+                .filter((img) => !imagesToDelete.includes(img.id))
+                .map((image) => (
+                  <div key={image.id} className="image-entry">
+                    <img
+                      src={image.url}
+                      alt={image.caption || 'Place image'}
+                      className="iamge-preview"
+                    />
+                    <label>
+                      Caption:
+                      <input
+                        type="text"
+                        value={image.caption || ''}
+                        onChange={(e) =>
+                          handleExistingImageChange(
+                            image.id,
+                            'caption',
+                            e.target.value
+                          )
+                        }
+                        placeholder="Image caption"
+                        className="image-caption"
+                      />
+                    </label>
+                    <div className="thumbnail-checkbox">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={image.is_thumbnail}
+                          onChange={(e) =>
+                            handleExistingImageChange(
+                              image.id,
+                              'is_thumbnail',
+                              e.target.checked
+                            )
+                          }
+                        />
+                        <span>Set as Thumbnail</span>
+                      </label>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(image.id)}
+                      className="remove-image-button"
+                    >
+                      Remove Image
+                    </button>
+                  </div>
+                ))}
+            </div>
+          )}
+
+          {/* New Images */}
           <div className="image-section">
-            <h3>Images</h3>
+            <h3>{isEditMode ? 'Add New Images' : 'Images'}</h3>
             {images.map((image, index) => (
               <div key={index} className="image-entry">
                 <label>
@@ -312,8 +374,8 @@ const AddPlaceForm = ({
                         )
                       }
                     />
-                  </label>
-                  <label htmlFor={`thumbnail-${index}`}>
+                    {/* </label> */}
+                    {/* <label htmlFor={`thumbnail-${index}`}> */}
                     <span>Set as Thumbnail</span>
                   </label>
                 </div>
@@ -335,7 +397,7 @@ const AddPlaceForm = ({
             </button>
           </div>
           <button type="submit" className="add-image-button">
-            Send Adventure
+            {isEditMode ? 'Edit Adventure' : 'Send Adventure'}
           </button>
         </form>
       </div>
