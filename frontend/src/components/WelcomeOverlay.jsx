@@ -1,6 +1,6 @@
 import '../styles/WelcomeOverlay.css';
 
-function WelcomeOverlay({ onClose }) {
+const WelcomeOverlay = ({ onClose }) => {
   return (
     <div className="overlay-container">
       <div className="overlay-content welcome-overlay">
@@ -28,6 +28,6 @@ function WelcomeOverlay({ onClose }) {
       </div>
     </div>
   );
-}
+};
 
 export default WelcomeOverlay;

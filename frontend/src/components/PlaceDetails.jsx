@@ -4,8 +4,9 @@ import api from '../api';
 import { Rating } from 'react-simple-star-rating';
 import '../styles/PlaceDetails.css';
 
-const PlaceDetails = ({ feature, onClose }) => {
+const PlaceDetails = ({ feature, onClose, onEdit, fetchPlaces }) => {
   const [placeData, setPlaceData] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     getPlaceData(feature.id);
@@ -19,6 +20,25 @@ const PlaceDetails = ({ feature, onClose }) => {
         setPlaceData(data);
       })
       .catch((err) => alert(err));
+  };
+
+  const handleEdit = () => {
+    onEdit(placeData);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await api.delete(`api/v1/${feature.id}/`);
+      if (res.status === 204) {
+        alert('Place deleted successfully');
+        fetchPlaces();
+        onClose();
+      } else {
+        alert('Failed to delete place');
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
   };
 
   if (!placeData) {
@@ -49,11 +69,43 @@ const PlaceDetails = ({ feature, onClose }) => {
         {placeData.author && <p>Author: {placeData.author}</p>}
         {placeData.images &&
           placeData.images.map((image) => (
-            <div key={image.url}>
-              <img src={image.url} width="50%" />
+            <div key={image.id || image.url}>
+              <img
+                src={image.url}
+                width="50%"
+                alt={image.caption || placeData.name}
+              />
               <p>{image.caption}</p>
             </div>
           ))}
+        {placeData.author === localStorage.getItem('username') && (
+          <div className="place-actions">
+            <button onClick={handleEdit} className="editbutton">
+              Edit
+            </button>
+            {!showDeleteConfirm ? (
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            ) : (
+              <div className="delete-confirm">
+                <p>Are you sure you want to delete this place?</p>
+                <button onClick={handleDelete} className="confirm-delete">
+                  Yes, Delete
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="cancel-delete"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
