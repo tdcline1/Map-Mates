@@ -1,8 +1,7 @@
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status
 from rest_framework.response import Response
 
-from .models import Place
-from .permissions import IsAuthorOrReadOnly
+from .models import Place, PlaceImage
 from .serializers import PlaceDetailSerializer, PlaceGeoJSONSerializer
 
 
@@ -61,12 +60,58 @@ class PlaceList(generics.ListCreateAPIView):
 class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Place.objects.select_related("author").prefetch_related("images")
     serializer_class = PlaceDetailSerializer
-    # permission_classes = [IsAuthorOrReadOnly]
 
-    # Not sure we need this becuase of permission
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     return Place.objects.filter(author=user)
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        serializer_data = {
+            "name": request.data.get("name"),
+            "subtitle": request.data.get("subtitle"),
+            "description": request.data.get("description"),
+            "longitude": request.data.get("longitude"),
+            "latitude": request.data.get("latitude"),
+            "category": request.data.get("category"),
+            "rating": request.data.get("rating"),
+        }
+
+        existing_image_ids = request.data.getlist("existing_image_ids")
+        existing_image_captions = request.data.getlist("existing_image_captions")
+        existing_image_thumbnails = request.data.getlist("existing_image_thumbnails")
+
+        if existing_image_ids:
+            for i, image_id in enumerate(exisitng_image - ids):
+                try:
+                    image = PlaceImage.objects.get(id=image_id, place=instance)
+                    image.caption = existing_image_captions[i]
+                    image.is_thumbnail = existing_image_thumbnails[i] == "true"
+                    image.save()
+                except PlaceImage.DoesNoteExist:
+                    pass
+
+        images_to_delete = request.data.getlist("images_to_delete")
+        if images_to_delete:
+            PlaceImage.objects.filter(id__in=images_to_delete, place=instance).delete()
+
+        image_files = request.FILES.getlist("images_files")
+        image_captions = request.data.getlist("images_captions")
+        image_thumbnails = request.data.getlist("images_thumbnails")
+
+        if image_files and not (
+            len(image_files) == len(image_captions) == len(image_thumbnails)
+        ):
+            return Response(
+                {
+                    "error": "Mismatched number of image files, captions or thumbnail designations"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = self.get_serializer(instance, data=serializer_data, partial=True)
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PlaceGeoJSONView(generics.ListAPIView):
