@@ -3,10 +3,15 @@ import { Rating } from 'react-simple-star-rating';
 import api from '../api';
 import '../styles/AddPlaceForm.css';
 
-const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
+const AddPlaceForm = ({
+  coordinates,
+  onClose,
+  fetchPlaces,
+  placeToEdit = null,
+}) => {
   const [inputs, setInputs] = useState({
-    longitude: coordinates.longitude,
-    latitude: coordinates.latitude,
+    longitude: coordinates.longitude || 0,
+    latitude: coordinates.latitude || 0,
     name: '',
     subtitle: '',
     description: '',
@@ -14,7 +19,29 @@ const AddPlaceForm = ({ coordinates, onClose, fetchPlaces }) => {
     rating: 0,
   });
   const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [imagesToDelete, setImagesToDelete] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
   const categories = ['nature', 'city', 'other'];
+
+  useEffect(() => {
+    if (placeToEdit) {
+      setIsEditMode(true);
+      setInputs({
+        longitude: placeToEdit.longitude,
+        latitude: placeToEdit.latitude,
+        name: placeToEdit.name,
+        subtitle: placeToEdit.subtitle,
+        description: placeToEdit.description,
+        category: placeToEdit.category || 'city',
+        rating: placeToEdit.rating || 0,
+      });
+
+      if (placeToEdit.images && placeToEdit.images.length > 0) {
+        setExistingImages(placeToEdit.images);
+      }
+    }
+  }, [placeToEdit]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
