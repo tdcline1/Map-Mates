@@ -78,9 +78,9 @@ const PlaceDetails = ({ feature, onClose, onEdit, fetchPlaces }) => {
               <p>{image.caption}</p>
             </div>
           ))}
-        {placeData.author === localStorage.getItem('username') && (
+        {placeData.is_owner && (
           <div className="place-actions">
-            <button onClick={handleEdit} className="editbutton">
+            <button onClick={handleEdit} className="edit-button">
               Edit
             </button>
             {!showDeleteConfirm ? (

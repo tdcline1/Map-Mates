@@ -24,6 +24,7 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
     images = PlaceImageSerializer(many=True, required=False)
     author = serializers.CharField(source="author.username", read_only=True)
     rating = serializers.FloatField(min_value=0, max_value=5)
+    is_owner = serializers.SerializerMethodField()
 
     class Meta:
         model = Place
@@ -38,6 +39,7 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
             "author",
             "rating",
             "images",
+            "is_owner",
         )
 
     def create(self, validated_data):
@@ -57,6 +59,12 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
         for image_data in images_data:
             PlaceImage.objects.create(place=place, **image_data)
         return place
+
+    def get_is_owner(self, obj):
+        request = self.context.get("request")
+        if not request or not request.user.is_authenticated:
+            return False
+        return obj.author == request.user
 
     # not sure this is needed... see when i implement creation
     def validate_rating(self, value):
