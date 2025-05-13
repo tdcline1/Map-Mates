@@ -141,10 +141,7 @@ const AddPlaceForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    // This approach not taken to avoid iterating over inherited properties
-    // for (let key in inputs) {
-    //     formData.append(key, inputs[key])
-    // }
+
     Object.keys(inputs).forEach((key) => {
       formData.append(key, inputs[key]);
     });
@@ -156,16 +153,41 @@ const AddPlaceForm = ({
       }
     });
 
-    try {
-      const res = await api.post('api/v1/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+    if (isEditMode) {
+      existingImages.forEach((image) => {
+        formData.append('existing_images_ids', image.id);
+        formData.append('existing_images_captions', image.caption);
+        formData.append('existing_images_thumbnails', image.is_thumbnail);
       });
-      if (res.status === 201) {
-        alert('Place added!');
-        fetchPlaces();
-        onClose();
-      } else {
-        alert('Failed to add place');
+
+      imagesToDelete.forEach((imageId) => {
+        formData.append('images_to_delete', imageId);
+      });
+    }
+
+    try {
+      let res;
+      if (isEditMode) {
+        res = await api.put(`api/v1/${placeToEdit.id}/`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        if (res.status === 200) {
+          alert('Place updated successfully!');
+          fetchPlaces();
+          onClose();
+        } else {
+          alert('Failed to update place');
+        }
+        res = await api.post('api/v1/', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        if (res.status === 201) {
+          alert('Place added!');
+          fetchPlaces();
+          onClose();
+        } else {
+          alert('Failed to add place');
+        }
       }
     } catch (err) {
       alert('Error: ' + err.message);
