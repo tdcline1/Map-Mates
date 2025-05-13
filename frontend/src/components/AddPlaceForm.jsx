@@ -53,8 +53,9 @@ const AddPlaceForm = ({
   };
 
   const addImage = () => {
-    const is_first = images.length === 0 ? true : false;
-    if (images.length >= 10) {
+    const is_first =
+      images.length === 0 && existingImages.length === 0 ? true : false;
+    if (images.length + existingImages.length >= 10) {
       alert('Maximum 10 images allowed.');
       return;
     }
@@ -67,6 +68,11 @@ const AddPlaceForm = ({
   const removeImage = (index) => {
     const newImages = images.filter((_, i) => i !== index);
     setImages(newImages);
+  };
+
+  const removeExistingImage = (imageId) => {
+    setImagesToDelete([...imagesToDelete, imageId]);
+    setExisitngImages(...existingImages.filter((img) => img.id !== imageId));
   };
 
   const handleImageChange = (index, field, value) => {
@@ -95,8 +101,41 @@ const AddPlaceForm = ({
       newImages.forEach((img, i) => {
         img.is_thumbnail = i === index ? value : false;
       });
+
+      if (value) {
+        setExistingImages(
+          existingImages.map((img) => ({
+            ...img,
+            is_thumbnail: false,
+          }))
+        );
+      }
     }
     setImages(newImages);
+  };
+
+  const handleExistingImageChange = (id, field, value) => {
+    if (field === 'is_thumbnail' && value) {
+      setExistingImages(
+        existingImages.map((img) => ({
+          ...img,
+          is_thumbnail: img.id === id ? value : false,
+        }))
+      );
+
+      setImages(
+        images.map((img) => ({
+          ...img,
+          is_thumbnail: false,
+        }))
+      );
+    } else {
+      setExistingImages(
+        existingImages.map((img) =>
+          img.id === id ? { ...img, [field]: value } : img
+        )
+      );
+    }
   };
 
   const handleSubmit = async (e) => {
