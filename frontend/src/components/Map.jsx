@@ -22,6 +22,7 @@ const Map = ({ isAuthenticated }) => {
   const [isShowingForm, setIsShowingForm] = useState(false);
   const [newPlaceLocation, setNewPlaceLocation] = useState();
   const [selectedPlaceDetails, setSelectedPlaceDetails] = useState(null);
+  const [placeToEdit, setPlaceToEdit] = useState(null);
 
   const fetchPlaces = () => {
     api
@@ -30,7 +31,7 @@ const Map = ({ isAuthenticated }) => {
       .then((data) => {
         setPlaceData(data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert('Error fetching places geoJSON:', err));
   };
 
   useEffect(() => {
@@ -83,6 +84,12 @@ const Map = ({ isAuthenticated }) => {
     setSelectedPlaceDetails(null);
   };
 
+  const handleEditPlace = (placeData) => {
+    setPlaceToEdit(placeData);
+    setIsShowingForm(true);
+    setSelectedPlaceDetails(null);
+  };
+
   return (
     <>
       <div ref={mapContainerRef} className="map-container" />
@@ -105,6 +112,7 @@ const Map = ({ isAuthenticated }) => {
           coordinates={newPlaceLocation}
           onClose={handleCloseForm}
           fetchPlaces={fetchPlaces}
+          placeToEdit={placeToEdit}
         />
       )}
       {mapRef.current &&
@@ -131,6 +139,8 @@ const Map = ({ isAuthenticated }) => {
         <PlaceDetails
           feature={selectedPlaceDetails}
           onClose={handleCloseDetailsModal}
+          onEdit={handleEditPlace}
+          fetchPlaces={fetchPlaces}
         />
       )}
     </>

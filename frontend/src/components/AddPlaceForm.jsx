@@ -10,8 +10,8 @@ const AddPlaceForm = ({
   placeToEdit = null,
 }) => {
   const [inputs, setInputs] = useState({
-    longitude: coordinates.longitude || 0,
-    latitude: coordinates.latitude || 0,
+    longitude: coordinates?.longitude || 0,
+    latitude: coordinates?.latitude || 0,
     name: '',
     subtitle: '',
     description: '',
@@ -281,7 +281,7 @@ const AddPlaceForm = ({
                     <img
                       src={image.url}
                       alt={image.caption || 'Place image'}
-                      className="iamge-preview"
+                      className="image-preview"
                     />
                     <label>
                       Caption:
