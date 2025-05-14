@@ -6,8 +6,8 @@ const WelcomeOverlay = ({ onClose }) => {
       <div className="overlay-content welcome-overlay">
         <h2>🌍 Welcome to MapMates!</h2>
         <p>
-          Embark on a journey to discover the community's favorite destinations,
-          share your travel stories, and connect with other explorers. Pin your
+          Embark on a journey to discover our community's favorite destinations.
+          Share your travel stories and connect with other explorers. Pin your
           favorite spots and inspire others!
         </p>
 

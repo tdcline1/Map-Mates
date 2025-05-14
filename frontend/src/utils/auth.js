@@ -11,6 +11,7 @@ export const isTokenValid = (token) => {
     const decoded = jwtDecode(token);
     const currentTime = Date.now() / 1000;
     return decoded.exp > currentTime;
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
     return false;
   }
