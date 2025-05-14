@@ -80,16 +80,18 @@ const PlaceDetails = ({ feature, onClose, onEdit, fetchPlaces }) => {
           ))}
         {placeData.is_owner && (
           <div className="place-actions">
-            <button onClick={handleEdit} className="edit-button">
-              Edit
-            </button>
             {!showDeleteConfirm ? (
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="delete-button"
-              >
-                Delete
-              </button>
+              <>
+                <button onClick={handleEdit} className="edit-button">
+                  Edit
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="delete-button"
+                >
+                  Delete
+                </button>
+              </>
             ) : (
               <div className="delete-confirm">
                 <p>Are you sure you want to delete this place?</p>

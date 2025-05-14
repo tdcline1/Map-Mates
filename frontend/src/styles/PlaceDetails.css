@@ -30,3 +30,80 @@
   font-size: 20px;
   cursor: pointer;
 }
+
+.place-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 1px solid #eaeaea;
+}
+
+.edit-button,
+.delete-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-button {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #3a80d2;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #d73c2c;
+}
+
+.delete-confirm {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.delete-confirm p {
+  color: #e74c3c;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.confirm-delete,
+.cancel-delete {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+.confirm-delete {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.confirm-delete:hover {
+  background-color: #c0392b;
+}
+
+.cancel-delete {
+  background-color: #7f8c8d;
+  color: white;
+}
+
+.cancel-delete:hover {
+  background-color: #6d7b7c;
+}
