@@ -6,15 +6,10 @@ import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 import Map from './components/Map';
 import WelcomeOverlay from './components/WelcomeOverlay';
+import { checkAuthStatus, clearAuthData } from './utils/auth';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem('access')
-  );
-  const [userName, setUserName] = useState(
-    localStorage.getItem('username') || 'Guest'
-  );
-
+  const [authState, setAuthState] = useState(checkAuthStatus());
   const [activeOverlay, setActiveOverlay] = useState(null);
 
   useEffect(() => {
@@ -27,8 +22,18 @@ function App() {
     const handleShowLogin = () => {
       setActiveOverlay('login');
     };
+
+    const handleAuthStatusChanged = () => {
+      setAuthState(checkAuthStatus());
+    };
+
     window.addEventListener('showLoginModal', handleShowLogin);
-    return () => window.removeEventListener('showLoginModal', handleShowLogin);
+    window.addEventListener('authStatusChanged', handleAuthStatusChanged);
+
+    return () => {
+      window.removeEventListener('showLoginModal', handleShowLogin);
+      window.removeEventListener('authStatusChanged', handleAuthStatusChanged);
+    };
   }, []);
 
   const handleWelcomeClose = () => {
@@ -36,29 +41,25 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
-    localStorage.removeItem('username');
-    setIsAuthenticated(false);
-    setUserName('Guest');
+    clearAuthData();
+    setAuthState({ isAuthenticated: false, username: 'Guest' });
   };
 
   const handleLoginSuccess = (username) => {
-    setIsAuthenticated(true);
-    setUserName(username);
+    setAuthState({ isAuthenticated: true, username });
     setActiveOverlay(null);
   };
 
   return (
     <>
       <Navbar
-        isAuthenticated={isAuthenticated}
-        userName={userName}
+        isAuthenticated={authState.isAuthenticated}
+        userName={authState.username}
         onLogout={handleLogout}
         onLoginClick={() => setActiveOverlay('login')}
         onRegisterClick={() => setActiveOverlay('register')}
       />
-      <Map isAuthenticated={isAuthenticated} />
+      <Map isAuthenticated={authState.isAuthenticated} />
 
       {activeOverlay === 'welcome' && (
         <WelcomeOverlay onClose={handleWelcomeClose} />
@@ -86,7 +87,6 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      {/* TODO <Footer /> */}
     </>
   );
 }
