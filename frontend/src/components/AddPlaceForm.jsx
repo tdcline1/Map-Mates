@@ -72,7 +72,7 @@ const AddPlaceForm = ({
 
   const removeExistingImage = (imageId) => {
     setImagesToDelete([...imagesToDelete, imageId]);
-    setExistingImages(...existingImages.filter((img) => img.id !== imageId));
+    setExistingImages(existingImages.filter((img) => img.id !== imageId));
   };
 
   const handleImageChange = (index, field, value) => {
@@ -178,6 +178,7 @@ const AddPlaceForm = ({
         } else {
           alert('Failed to update place');
         }
+      } else {
         res = await api.post('api/v1/', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
@@ -397,7 +398,7 @@ const AddPlaceForm = ({
             </button>
           </div>
           <button type="submit" className="add-image-button">
-            {isEditMode ? 'Edit Adventure' : 'Send Adventure'}
+            {isEditMode ? 'Confirm Edits' : 'Send Adventure'}
           </button>
         </form>
       </div>
