@@ -6,11 +6,16 @@ import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 import Map from './components/Map';
 import WelcomeOverlay from './components/WelcomeOverlay';
-import { checkAuthStatus, clearAuthData } from './utils/auth';
+import { setupApiInterceptors } from './api';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-function App() {
-  const [authState, setAuthState] = useState(checkAuthStatus());
+function AppContent() {
   const [activeOverlay, setActiveOverlay] = useState(null);
+  const { isAuthenticated, username, logout, getAccessToken } = useAuth();
+
+  useEffect(() => {
+    setupApiInterceptors(getAccessToken, logout);
+  }, [getAccessToken, logout]);
 
   useEffect(() => {
     const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
@@ -23,16 +28,10 @@ function App() {
       setActiveOverlay('login');
     };
 
-    const handleAuthStatusChanged = () => {
-      setAuthState(checkAuthStatus());
-    };
-
     window.addEventListener('showLoginModal', handleShowLogin);
-    window.addEventListener('authStatusChanged', handleAuthStatusChanged);
 
     return () => {
       window.removeEventListener('showLoginModal', handleShowLogin);
-      window.removeEventListener('authStatusChanged', handleAuthStatusChanged);
     };
   }, []);
 
@@ -40,26 +39,20 @@ function App() {
     setActiveOverlay(null);
   };
 
-  const handleLogout = () => {
-    clearAuthData();
-    setAuthState({ isAuthenticated: false, username: 'Guest' });
-  };
-
-  const handleLoginSuccess = (username) => {
-    setAuthState({ isAuthenticated: true, username });
+  const handleLoginSuccess = () => {
     setActiveOverlay(null);
   };
 
   return (
     <>
       <Navbar
-        isAuthenticated={authState.isAuthenticated}
-        userName={authState.username}
-        onLogout={handleLogout}
+        isAuthenticated={isAuthenticated}
+        userName={username}
+        onLogout={logout}
         onLoginClick={() => setActiveOverlay('login')}
         onRegisterClick={() => setActiveOverlay('register')}
       />
-      <Map isAuthenticated={authState.isAuthenticated} />
+      <Map isAuthenticated={isAuthenticated} />
 
       {activeOverlay === 'welcome' && (
         <WelcomeOverlay onClose={handleWelcomeClose} />
@@ -88,6 +81,14 @@ function App() {
         </Routes>
       </main>
     </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
