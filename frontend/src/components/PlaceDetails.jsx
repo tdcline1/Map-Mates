@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { Rating } from 'react-simple-star-rating';
 import '../styles/PlaceDetails.css';
