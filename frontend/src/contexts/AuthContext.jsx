@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
         setAuthState({
           isAuthenticated: false,
           username: 'Guest',
-          isLoading: false``,
+          isLoading: false,
         });
       }
     };

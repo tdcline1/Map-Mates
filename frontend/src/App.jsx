@@ -35,14 +35,6 @@ function AppContent() {
     };
   }, []);
 
-  const handleWelcomeClose = () => {
-    setActiveOverlay(null);
-  };
-
-  const handleLoginSuccess = () => {
-    setActiveOverlay(null);
-  };
-
   return (
     <>
       <Navbar
@@ -55,12 +47,12 @@ function AppContent() {
       <Map isAuthenticated={isAuthenticated} />
 
       {activeOverlay === 'welcome' && (
-        <WelcomeOverlay onClose={handleWelcomeClose} />
+        <WelcomeOverlay onClose={() => setActiveOverlay(null)} />
       )}
 
       {activeOverlay === 'login' && (
         <Login
-          onLoginSuccess={handleLoginSuccess}
+          onLoginSuccess={() => setActiveOverlay(null)}
           onClose={() => setActiveOverlay(null)}
           onRegisterClick={() => setActiveOverlay('register')}
         />
@@ -68,7 +60,7 @@ function AppContent() {
 
       {activeOverlay === 'register' && (
         <Register
-          onLoginSuccess={handleLoginSuccess}
+          onLoginSuccess={() => setActiveOverlay(null)}
           onClose={() => setActiveOverlay(null)}
           onLoginClick={() => setActiveOverlay('login')}
         />
