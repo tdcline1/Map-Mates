@@ -1,10 +1,6 @@
 import Form from '../components/Form';
 
-function Login({ onLoginSuccess, onClose, onRegisterClick }) {
-  const handleSuccess = (username) => {
-    onLoginSuccess(username);
-  };
-
+function Login({ onClose, onRegisterClick }) {
   const handleClose = (nextOverlay) => {
     if (nextOverlay === 'register') {
       onRegisterClick();
@@ -12,14 +8,7 @@ function Login({ onLoginSuccess, onClose, onRegisterClick }) {
       onClose();
     }
   };
-  return (
-    <Form
-      route="/api/token/"
-      method="login"
-      onSuccess={handleSuccess}
-      onClose={handleClose}
-    />
-  );
+  return <Form route="/api/token/" method="login" onClose={handleClose} />;
 }
 
 export default Login;

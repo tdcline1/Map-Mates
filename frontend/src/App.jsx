@@ -52,7 +52,6 @@ function AppContent() {
 
       {activeOverlay === 'login' && (
         <Login
-          onLoginSuccess={() => setActiveOverlay(null)}
           onClose={() => setActiveOverlay(null)}
           onRegisterClick={() => setActiveOverlay('register')}
         />
@@ -60,7 +59,6 @@ function AppContent() {
 
       {activeOverlay === 'register' && (
         <Register
-          onLoginSuccess={() => setActiveOverlay(null)}
           onClose={() => setActiveOverlay(null)}
           onLoginClick={() => setActiveOverlay('login')}
         />

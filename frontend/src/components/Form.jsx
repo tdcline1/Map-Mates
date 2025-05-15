@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import api from '../api';
+import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/Form.css';
 import LoadingIndicator from './LoadingIndicator';
 
-function Form({ route, method, onSuccess, onClose }) {
+function Form({ route, method, onClose }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { login } = useAuth();
 
   const name = method === 'login' ? 'Login' : 'Register';
 
@@ -17,26 +20,23 @@ function Form({ route, method, onSuccess, onClose }) {
     setError(null);
 
     try {
-      const res = await api.post(route, { username, password });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}${route}`,
+        { username, password }
+      );
+
       if (method === 'login') {
-        localStorage.setItem('access', res.data.access);
-        localStorage.setItem('refresh', res.data.refresh);
-        localStorage.setItem('username', username);
-        onSuccess(username);
+        const { access, refresh } = response.data;
+        login(access, refresh, username);
+        onClose();
       } else {
-        try {
-          localStorage.clear();
-          const loginRes = await api.post('/api/token/', {
-            username,
-            password,
-          });
-          localStorage.setItem('access', loginRes.data.access);
-          localStorage.setItem('refresh', loginRes.data.refresh);
-          localStorage.setItem('username', username);
-          onSuccess(username);
-        } catch (loginError) {
-          onSuccess(username);
-        }
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/token/`,
+          { username, password }
+        );
+        const { access, refresh } = response.data;
+        login(access, refresh, username);
+        onClose();
       }
     } catch (error) {
       console.error(`${method} error:`, error);

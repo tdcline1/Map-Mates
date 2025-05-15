@@ -1,10 +1,6 @@
 import Form from '../components/Form';
 
-function Register({ onLoginSuccess, onClose, onLoginClick }) {
-  const handleSuccess = (username) => {
-    onLoginSuccess(username);
-  };
-
+function Register({ onClose, onLoginClick }) {
   const handleClose = (nextOverlay) => {
     if (nextOverlay === 'login') {
       onLoginClick();
@@ -13,12 +9,7 @@ function Register({ onLoginSuccess, onClose, onLoginClick }) {
     }
   };
   return (
-    <Form
-      route="/api/user/register/"
-      method="register"
-      onSuccess={handleSuccess}
-      onClose={handleClose}
-    />
+    <Form route="/api/user/register/" method="register" onClose={handleClose} />
   );
 }
 
