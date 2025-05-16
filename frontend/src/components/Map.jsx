@@ -133,6 +133,7 @@ const Map = ({ isAuthenticated }) => {
           map={mapRef.current}
           activeFeature={activeFeature}
           onShowDetails={handleShowDetails}
+          onClose={() => setActiveFeature(null)}
         />
       )}
       {mapRef.current && selectedPlaceDetails && (

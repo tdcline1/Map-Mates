@@ -2,8 +2,9 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import { Rating } from 'react-simple-star-rating';
+import '../styles/Popup.css';
 
-const Popup = ({ map, activeFeature, onShowDetails }) => {
+const Popup = ({ map, activeFeature, onShowDetails, onClose }) => {
   const popupRef = useRef();
   const contentRef = useRef(document.createElement('div'));
 
@@ -33,6 +34,19 @@ const Popup = ({ map, activeFeature, onShowDetails }) => {
     <>
       {createPortal(
         <div className="portal-content">
+          {/* Close button */}
+          <button
+            onClick={() => {
+              {
+                onClose();
+              }
+              popupRef.current?.remove();
+            }}
+            className="custom-close-button"
+            aria-label="Close popup"
+          >
+            ×
+          </button>
           {activeFeature?.properties.thumbnail_url ? (
             <img src={activeFeature?.properties.thumbnail_url} width="100%" />
           ) : null}
