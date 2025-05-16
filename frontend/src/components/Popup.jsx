@@ -48,7 +48,10 @@ const Popup = ({ map, activeFeature, onShowDetails, onClose }) => {
             ×
           </button>
           {activeFeature?.properties.thumbnail_url ? (
-            <img src={activeFeature?.properties.thumbnail_url} width="100%" />
+            <img
+              src={activeFeature?.properties.thumbnail_url}
+              className="popup-image"
+            />
           ) : null}
           <table>
             <tbody>

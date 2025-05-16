@@ -2,6 +2,25 @@
   display: none !important;
 }
 
+.popup-image {
+  max-height: 200px;
+  max-width: 100%;
+  width: auto;
+  display: block;
+  box-sizing: border-box;
+}
+
+.mapboxgl-popup-content {
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.portal-content {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .custom-close-button {
   position: absolute;
   top: 0px;
