@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
@@ -35,32 +35,39 @@ function AppContent() {
     };
   }, []);
 
+  const handleCloseOverlay = useCallback(() => setActiveOverlay(null), []);
+  const handleLoginClick = useCallback(() => setActiveOverlay('login'), []);
+  const handleRegisterClick = useCallback(
+    () => setActiveOverlay('register'),
+    []
+  );
+
   return (
     <>
       <Navbar
         isAuthenticated={isAuthenticated}
         userName={username}
         onLogout={logout}
-        onLoginClick={() => setActiveOverlay('login')}
-        onRegisterClick={() => setActiveOverlay('register')}
+        onLoginClick={handleLoginClick}
+        onRegisterClick={handleRegisterClick}
       />
       <Map isAuthenticated={isAuthenticated} />
 
       {activeOverlay === 'welcome' && (
-        <WelcomeOverlay onClose={() => setActiveOverlay(null)} />
+        <WelcomeOverlay onClose={handleCloseOverlay} />
       )}
 
       {activeOverlay === 'login' && (
         <Login
-          onClose={() => setActiveOverlay(null)}
-          onRegisterClick={() => setActiveOverlay('register')}
+          onClose={handleCloseOverlay}
+          onRegisterClick={handleRegisterClick}
         />
       )}
 
       {activeOverlay === 'register' && (
         <Register
-          onClose={() => setActiveOverlay(null)}
-          onLoginClick={() => setActiveOverlay('login')}
+          onClose={handleCloseOverlay}
+          onLoginClick={handleLoginClick}
         />
       )}
 
