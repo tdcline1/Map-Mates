@@ -34,7 +34,6 @@ const Popup = ({ map, activeFeature, onShowDetails, onClose }) => {
     <>
       {createPortal(
         <div className="portal-content">
-          {/* Close button */}
           <button
             onClick={() => {
               {
