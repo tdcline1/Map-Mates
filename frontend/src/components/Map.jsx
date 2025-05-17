@@ -59,6 +59,7 @@ const Map = ({ isAuthenticated }) => {
   };
 
   const handleAddPlaceClick = () => {
+    setPlaceToEdit(null);
     setIsAddingPlace(true);
   };
 
