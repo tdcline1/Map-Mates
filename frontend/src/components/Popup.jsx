@@ -22,12 +22,14 @@ const Popup = ({ map, activeFeature, onShowDetails, onClose }) => {
   }, []);
 
   useEffect(() => {
-    if (!activeFeature) return;
-
+    if (activeFeature) {
     popupRef.current
       .setLngLat(activeFeature.geometry.coordinates)
       .setDOMContent(contentRef.current)
       .addTo(map);
+    } else if (popupRef.current) {
+      popupRef.current.remove();
+    }
   }, [activeFeature]);
 
   return (
