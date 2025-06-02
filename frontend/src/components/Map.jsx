@@ -58,6 +58,10 @@ const Map = ({ isAuthenticated }) => {
     setActiveFeature(feature);
   };
 
+  const closePopup = () => {
+    setActiveFeature(null);
+  };
+
   const handleAddPlaceClick = () => {
     setPlaceToEdit(null);
     setIsAddingPlace(true);
@@ -134,7 +138,7 @@ const Map = ({ isAuthenticated }) => {
           map={mapRef.current}
           activeFeature={activeFeature}
           onShowDetails={handleShowDetails}
-          onClose={() => setActiveFeature(null)}
+          onClose={closePopup}
         />
       )}
       {mapRef.current && selectedPlaceDetails && (
@@ -143,6 +147,7 @@ const Map = ({ isAuthenticated }) => {
           onClose={handleCloseDetailsModal}
           onEdit={handleEditPlace}
           fetchPlaces={fetchPlaces}
+          onClosePopup={closePopup}
         />
       )}
     </>
