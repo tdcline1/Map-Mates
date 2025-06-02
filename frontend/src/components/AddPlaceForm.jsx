@@ -8,6 +8,7 @@ const AddPlaceForm = ({
   onClose,
   fetchPlaces,
   placeToEdit = null,
+  onClosePopup,
 }) => {
   const [inputs, setInputs] = useState({
     longitude: coordinates?.longitude || 0,
@@ -175,6 +176,7 @@ const AddPlaceForm = ({
           alert('Place updated successfully!');
           fetchPlaces();
           onClose();
+          onClosePopup();
         } else {
           alert('Failed to update place');
         }

@@ -118,6 +118,7 @@ const Map = ({ isAuthenticated }) => {
           onClose={handleCloseForm}
           fetchPlaces={fetchPlaces}
           placeToEdit={placeToEdit}
+          onClosePopup={closePopup}
         />
       )}
       {mapRef.current &&
