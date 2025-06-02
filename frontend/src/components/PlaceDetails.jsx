@@ -3,7 +3,13 @@ import api from '../api';
 import { Rating } from 'react-simple-star-rating';
 import '../styles/PlaceDetails.css';
 
-const PlaceDetails = ({ feature, onClose, onEdit, fetchPlaces }) => {
+const PlaceDetails = ({
+  feature,
+  onClose,
+  onEdit,
+  fetchPlaces,
+  onClosePopup,
+}) => {
   const [placeData, setPlaceData] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -32,6 +38,7 @@ const PlaceDetails = ({ feature, onClose, onEdit, fetchPlaces }) => {
         alert('Place deleted successfully');
         fetchPlaces();
         onClose();
+        onClosePopup();
       } else {
         alert('Failed to delete place');
       }
