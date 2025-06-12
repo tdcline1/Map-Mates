@@ -137,3 +137,5 @@ The backend's reliability is ensured through a suite of unit and integration tes
     ```
 
 The application will be accessible at the development URL provided by the React development server (usually `http://localhost:3000`).
+<img width="1457" alt="image" src="https://github.com/user-attachments/assets/defe6935-d7b6-4568-9842-6eaca77e0124" />
+
