@@ -96,20 +96,29 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
         image_captions = request.data.getlist("images_captions")
         image_thumbnails = request.data.getlist("images_thumbnails")
 
-        if image_files and not (
-            len(image_files) == len(image_captions) == len(image_thumbnails)
-        ):
-            return Response(
-                {
-                    "error": "Mismatched number of image files, captions or thumbnail designations"
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        if image_files:
+            if not (len(image_files) == len(image_captions) == len(image_thumbnails)):
+                return Response(
+                    {
+                        "error": "Mismatched number of image files, captions or thumbnail designations"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            for i, image_file in enumerate(image_files):
+                PlaceImage.objects.create(
+                    place=instance,
+                    image=image_file,
+                    caption=image_captions[i],
+                    is_thumbnail=image_thumbnails[i] == "true",
+                )
 
         serializer = self.get_serializer(instance, data=serializer_data, partial=True)
         if serializer.is_valid():
             self.perform_update(serializer)
-            return Response(serializer.data)
+
+            updated_serializer = self.get_serializer(instance)
+            return Response(updated_serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
