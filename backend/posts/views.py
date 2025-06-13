@@ -74,12 +74,12 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
             "rating": request.data.get("rating"),
         }
 
-        existing_image_ids = request.data.getlist("existing_image_ids")
-        existing_image_captions = request.data.getlist("existing_image_captions")
-        existing_image_thumbnails = request.data.getlist("existing_image_thumbnails")
+        existing_image_ids = request.data.getlist("existing_images_ids")
+        existing_image_captions = request.data.getlist("existing_images_captions")
+        existing_image_thumbnails = request.data.getlist("existing_images_thumbnails")
 
         if existing_image_ids:
-            for i, image_id in enumerate(exisitng_image_ids):
+            for i, image_id in enumerate(existing_image_ids):
                 try:
                     image = PlaceImage.objects.get(id=image_id, place=instance)
                     image.caption = existing_image_captions[i]
