@@ -79,13 +79,13 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
         existing_image_thumbnails = request.data.getlist("existing_image_thumbnails")
 
         if existing_image_ids:
-            for i, image_id in enumerate(exisitng_image - ids):
+            for i, image_id in enumerate(exisitng_image_ids):
                 try:
                     image = PlaceImage.objects.get(id=image_id, place=instance)
                     image.caption = existing_image_captions[i]
                     image.is_thumbnail = existing_image_thumbnails[i] == "true"
                     image.save()
-                except PlaceImage.DoesNoteExist:
+                except PlaceImage.DoesNotExist:
                     pass
 
         images_to_delete = request.data.getlist("images_to_delete")
@@ -116,7 +116,6 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=serializer_data, partial=True)
         if serializer.is_valid():
             self.perform_update(serializer)
-
             updated_serializer = self.get_serializer(instance)
             return Response(updated_serializer.data, status=status.HTTP_200_OK)
 
