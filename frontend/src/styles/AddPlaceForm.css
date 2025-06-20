@@ -59,7 +59,7 @@
 .add-place-form {
   position: relative;
   background: white;
-  padding: 0px;
+  padding: 10px;
   border-radius: 8px;
   z-index: 1000;
   max-height: calc(100vh - 40px);
