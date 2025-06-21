@@ -3,6 +3,12 @@ import { Rating } from 'react-simple-star-rating';
 import api from '../api';
 import '../styles/AddPlaceForm.css';
 
+/**
+ * AddPlaceForm Component
+ *
+ * Modal form for adding new places or editing existing places.
+ * Supports image uploads and metadata editing.
+ */
 const AddPlaceForm = ({
   coordinates,
   onClose,
@@ -19,7 +25,7 @@ const AddPlaceForm = ({
     category: 'city',
     rating: 0,
   });
-  const [images, setImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [imagesToDelete, setImagesToDelete] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -44,31 +50,30 @@ const AddPlaceForm = ({
     }
   }, [placeToEdit]);
 
-  const handleChange = (event) => {
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setInputs((values) => ({ ...values, [name]: value }));
+    setInputs((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleRating = (rate) => {
-    setInputs((values) => ({ ...values, rating: rate }));
+  const handleRatingChange = (rate) => {
+    setInputs((prev) => ({ ...prev, rating: rate }));
   };
 
-  const addImage = () => {
-    const is_first =
-      images.length === 0 && existingImages.length === 0 ? true : false;
-    if (images.length + existingImages.length >= 10) {
+  const addNewImage = () => {
+    if (newImages.length + existingImages.length >= 10) {
       alert('Maximum 10 images allowed.');
       return;
     }
-    setImages([
-      ...images,
-      { file: null, caption: '', preview: null, is_thumbnail: is_first },
+
+    const isFirstImage = newImages.length === 0 && existingImages.length === 0;
+    setNewImages([
+      ...newImages,
+      { file: null, caption: '', preview: null, is_thumbnail: isFirstImage },
     ]);
   };
 
-  const removeImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
+  const removeNewImage = (index) => {
+    setNewImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const removeExistingImage = (imageId) => {
@@ -76,10 +81,12 @@ const AddPlaceForm = ({
     setExistingImages(existingImages.filter((img) => img.id !== imageId));
   };
 
-  const handleImageChange = (index, field, value) => {
-    const newImages = [...images];
+  const updateNewImage = (index, field, value) => {
+    const updatedImages = [...newImages];
     if (field === 'file') {
       const file = value;
+
+      // Validate file type and size
       if (
         file &&
         !['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)
@@ -91,18 +98,20 @@ const AddPlaceForm = ({
         alert('Image size should not exceed 5mb.');
         return;
       }
-      newImages[index] = {
-        ...newImages[index],
+
+      // Create preview URL
+      updatedImages[index] = {
+        ...updatedImages[index],
         file,
         preview: URL.createObjectURL(file),
       };
     } else if (field === 'caption') {
-      newImages[index] = { ...newImages[index], caption: value };
+      updatedImages[index] = { ...updatedImages[index], caption: value };
     } else if (field === 'is_thumbnail') {
-      newImages.forEach((img, i) => {
+      // Clear other thumbnails
+      updatedImages.forEach((img, i) => {
         img.is_thumbnail = i === index ? value : false;
       });
-
       if (value) {
         setExistingImages(
           existingImages.map((img) => ({
@@ -112,20 +121,20 @@ const AddPlaceForm = ({
         );
       }
     }
-    setImages(newImages);
+    setNewImages(updatedImages);
   };
 
-  const handleExistingImageChange = (id, field, value) => {
+  const updateExistingImage = (id, field, value) => {
     if (field === 'is_thumbnail' && value) {
+      // Only one thumbnail allowed across all images
       setExistingImages(
         existingImages.map((img) => ({
           ...img,
           is_thumbnail: img.id === id ? value : false,
         }))
       );
-
-      setImages(
-        images.map((img) => ({
+      setNewImages(
+        newImages.map((img) => ({
           ...img,
           is_thumbnail: false,
         }))
@@ -139,14 +148,20 @@ const AddPlaceForm = ({
     }
   };
 
+  /**
+   * Handle form Submission
+   * 1. Assemble FormData object
+   * 2. Send FormData object to API via Post (new) or Put (edit)
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Assemble FormData object
     const formData = new FormData();
 
     Object.keys(inputs).forEach((key) => {
       formData.append(key, inputs[key]);
     });
-    images.forEach((image) => {
+    newImages.forEach((image) => {
       if (image.file) {
         formData.append('images_files', image.file);
         formData.append('images_captions', image.caption || '');
@@ -166,34 +181,32 @@ const AddPlaceForm = ({
       });
     }
 
+    // Send FormData object to API via Post (new) or Put (edit)
     try {
-      let res;
-      if (isEditMode) {
-        res = await api.put(`api/v1/${placeToEdit.id}/`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-        if (res.status === 200) {
-          alert('Place updated successfully!');
-          fetchPlaces();
-          onClose();
-          onClosePopup();
-        } else {
-          alert('Failed to update place');
-        }
+      const endpoint = isEditMode ? `api/v1/${placeToEdit.id}/` : 'api/v1/';
+      const method = isEditMode ? 'put' : 'post';
+      const expectedStatus = isEditMode ? 200 : 201;
+
+      const response = await api[method](endpoint, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      if (response.status === expectedStatus) {
+        const message = isEditMode
+          ? 'Place updated successfully!'
+          : 'Place added!';
+        alert(message);
+        fetchPlaces();
+        onClose();
+        onClosePopup();
       } else {
-        res = await api.post('api/v1/', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-        if (res.status === 201) {
-          alert('Place added!');
-          fetchPlaces();
-          onClose();
-        } else {
-          alert('Failed to add place');
-        }
+        const errorMessage = isEditMode
+          ? 'Failed to update Place'
+          : 'Failed to add place';
+        alert(errorMessage);
       }
-    } catch (err) {
-      alert('Error: ' + err.message);
+    } catch (error) {
+      alert('Error: ' + error.message);
     }
   };
 
@@ -201,12 +214,13 @@ const AddPlaceForm = ({
     <div className="form-overlay">
       <div className="add-place-form">
         <button className="close-button" onClick={onClose}>
-          x
+          ×
         </button>
         <h2 className="form-title">
           {isEditMode ? 'Edit Adventure' : 'Share the Adventure!'}
         </h2>
         <form onSubmit={handleSubmit}>
+          {/* Basic place information */}
           <label>
             Place:
             <input
@@ -214,7 +228,7 @@ const AddPlaceForm = ({
               name="name"
               required
               value={inputs.name}
-              onChange={handleChange}
+              onChange={handleInputChange}
               placeholder="ex: Florence, Italy"
             />
           </label>
@@ -225,7 +239,7 @@ const AddPlaceForm = ({
               name="subtitle"
               required
               value={inputs.subtitle}
-              onChange={handleChange}
+              onChange={handleInputChange}
               placeholder="ex: Time machine to the Renaissance!"
             />
           </label>
@@ -235,7 +249,7 @@ const AddPlaceForm = ({
               name="description"
               required
               value={inputs.description}
-              onChange={handleChange}
+              onChange={handleInputChange}
               placeholder="Tell us what you liked most about this place!"
             />
           </label>
@@ -254,7 +268,7 @@ const AddPlaceForm = ({
                     ? 'customButton active'
                     : 'customButton'
                 }
-                onClick={handleChange}
+                onClick={handleInputChange}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </button>
@@ -264,7 +278,7 @@ const AddPlaceForm = ({
             <label>
               Rating:
               <Rating
-                onClick={handleRating}
+                onClick={handleRatingChange}
                 initialValue={inputs.rating}
                 allowFraction
                 size="28"
@@ -273,7 +287,7 @@ const AddPlaceForm = ({
             </label>
           </div>
 
-          {/* Existing Images */}
+          {/* Existing Images section (Edit Mode Only) */}
           {isEditMode && existingImages.length > 0 && (
             <div className="image-section">
               <h3>Existing Images</h3>
@@ -292,7 +306,7 @@ const AddPlaceForm = ({
                         type="text"
                         value={image.caption || ''}
                         onChange={(e) =>
-                          handleExistingImageChange(
+                          updateExistingImage(
                             image.id,
                             'caption',
                             e.target.value
@@ -308,7 +322,7 @@ const AddPlaceForm = ({
                           type="checkbox"
                           checked={image.is_thumbnail}
                           onChange={(e) =>
-                            handleExistingImageChange(
+                            updateExistingImage(
                               image.id,
                               'is_thumbnail',
                               e.target.checked
@@ -330,10 +344,10 @@ const AddPlaceForm = ({
             </div>
           )}
 
-          {/* New Images */}
+          {/* New Images Section */}
           <div className="image-section">
             <h3>{isEditMode ? 'Add New Images' : 'Images'}</h3>
-            {images.map((image, index) => (
+            {newImages.map((image, index) => (
               <div key={index} className="image-entry">
                 <label>
                   Image {index + 1}:
@@ -341,7 +355,7 @@ const AddPlaceForm = ({
                     type="file"
                     accept="image/jpeg,image/jpg,image/png"
                     onChange={(e) =>
-                      handleImageChange(index, 'file', e.target.files[0])
+                      updateNewImage(index, 'file', e.target.files[0])
                     }
                   />
                 </label>
@@ -358,7 +372,7 @@ const AddPlaceForm = ({
                     type="text"
                     value={image.caption}
                     onChange={(e) =>
-                      handleImageChange(index, 'caption', e.target.value)
+                      updateNewImage(index, 'caption', e.target.value)
                     }
                     placeholder="Image caption"
                     className="image-caption"
@@ -370,21 +384,15 @@ const AddPlaceForm = ({
                       type="checkbox"
                       checked={image.is_thumbnail}
                       onChange={(e) =>
-                        handleImageChange(
-                          index,
-                          'is_thumbnail',
-                          e.target.checked
-                        )
+                        updateNewImage(index, 'is_thumbnail', e.target.checked)
                       }
                     />
-                    {/* </label> */}
-                    {/* <label htmlFor={`thumbnail-${index}`}> */}
                     <span>Set as Thumbnail</span>
                   </label>
                 </div>
                 <button
                   type="button"
-                  onClick={() => removeImage(index)}
+                  onClick={() => removeNewImage(index)}
                   className="remove-image-button"
                 >
                   Remove Image
@@ -393,7 +401,7 @@ const AddPlaceForm = ({
             ))}
             <button
               type="button"
-              onClick={addImage}
+              onClick={addNewImage}
               className="add-image-button"
             >
               Add Image
