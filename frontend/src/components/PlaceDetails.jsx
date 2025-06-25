@@ -12,6 +12,7 @@ const PlaceDetails = ({
 }) => {
   const [placeData, setPlaceData] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     getPlaceData(feature.id);
@@ -47,6 +48,26 @@ const PlaceDetails = ({
     }
   };
 
+  const nextImage = () => {
+    if (placeData?.images && placeData.images.length > 0) {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === placeData.images.length - 1 ? 0 : prevIndex + 1
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (placeData?.images && placeData.images.length > 0) {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === 0 ? placeData.images.length - 1 : prevIndex - 1
+      );
+    }
+  };
+
+  const goToImage = (index) => {
+    setCurrentImageIndex(index);
+  };
+
   if (!placeData) {
     return <div>Loading...</div>;
   }
@@ -73,17 +94,71 @@ const PlaceDetails = ({
 
         {placeData.description && <p>{placeData.description}</p>}
         {placeData.author && <p>Author: {placeData.author}</p>}
-        {placeData.images &&
-          placeData.images.map((image) => (
-            <div key={image.id || image.url}>
-              <img
-                src={image.url}
-                width="50%"
-                alt={image.caption || placeData.name}
-              />
-              <p>{image.caption}</p>
+
+        {/* Photo Carousel */}
+        {placeData.images && placeData.images.length > 0 && (
+          <div className="image-carousel">
+            <div className="image-container">
+              <div className="image-wrapper">
+                <img
+                  src={placeData.images[currentImageIndex].url}
+                  alt={
+                    placeData.images[currentImageIndex].caption ||
+                    placeData.name
+                  }
+                  className="carousel-image"
+                />
+
+                {placeData.images.length > 1 && (
+                  <>
+                    <button
+                      className="carousel-button carousel-button-prev"
+                      onClick={prevImage}
+                      aria-label="Previous Image"
+                    >
+                      &#8249;
+                    </button>
+                    <button
+                      className="carousel-button carousel-button-next"
+                      onClick={nextImage}
+                      aria-label="Next image"
+                    >
+                      &#8250;
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {placeData.images[currentImageIndex].caption && (
+                <p className="image-caption">
+                  {placeData.images[currentImageIndex].caption}
+                </p>
+              )}
+
+              {placeData.images.length > 1 && (
+                <div className="carousel-dots">
+                  {placeData.images.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`carousel-dot ${
+                        index === currentImageIndex ? 'active' : ''
+                      }`}
+                      onClick={() => goToImage(index)}
+                      aria-label={`Go to image ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {placeData.images.length > 1 && (
+                <div className="image-counter">
+                  {currentImageIndex + 1} / {placeData.images.length}
+                </div>
+              )}
             </div>
-          ))}
+          </div>
+        )}
+
         {placeData.is_owner && (
           <div className="place-actions">
             {!showDeleteConfirm ? (
