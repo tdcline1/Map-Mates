@@ -177,12 +177,9 @@
   font-style: italic;
   color: #666;
   font-size: 14px;
-  /* Ensure caption text wraps properly */
   word-wrap: break-word;
   hyphens: auto;
-  /* Make caption width match the image container */
   width: 100%;
-  /* Add subtle background to better define the caption area */
   background-color: rgba(245, 245, 245, 0.8);
   padding: 4px 8px;
   border-radius: 4px;
