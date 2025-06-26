@@ -80,20 +80,27 @@ const PlaceDetails = ({
         </button>
         <h1>{placeData?.name}</h1>
         {placeData.subtitle && <p>{placeData.subtitle}</p>}
-        {placeData.rating && (
-          <p>
-            Rating:{' '}
-            <Rating
-              readonly
-              initialValue={placeData.rating}
-              size={20}
-              allowFraction
-            />
-          </p>
-        )}
+
+        <div className="rating-author-container">
+          {placeData.author && (
+            <div className="author-section">
+              <span>{placeData.author}</span>
+            </div>
+          )}
+          {placeData.rating && (
+            <div className="rating-section">
+              <span>Rating:</span>
+              <Rating
+                readonly
+                initialValue={placeData.rating}
+                size={20}
+                allowFraction
+              />
+            </div>
+          )}
+        </div>
 
         {placeData.description && <p>{placeData.description}</p>}
-        {placeData.author && <p>Author: {placeData.author}</p>}
 
         {/* Photo Carousel */}
         {placeData.images && placeData.images.length > 0 && (
