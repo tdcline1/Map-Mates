@@ -51,7 +51,6 @@ const Map = ({ isAuthenticated }) => {
     mapRef.current.off('mousedown', handleUserInteraction);
     mapRef.current.off('touchstart', handleUserInteraction);
     mapRef.current.off('wheel', handleUserInteraction);
-    mapRef.current.off('dblclick', handleUserInteraction);
   };
 
   useEffect(() => {
@@ -79,7 +78,6 @@ const Map = ({ isAuthenticated }) => {
       mapRef.current.on('mousedown', handleUserInteraction);
       mapRef.current.on('touchstart', handleUserInteraction);
       mapRef.current.on('wheel', handleUserInteraction);
-      mapRef.current.on('dblclick', handleUserInteraction);
 
       mapRef.current.on('moveend', () => {
         if (!userHasInteractedRef.current) {
