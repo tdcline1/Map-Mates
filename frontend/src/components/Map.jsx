@@ -15,6 +15,7 @@ mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 const Map = ({ isAuthenticated }) => {
   const mapRef = useRef(null);
   const mapContainerRef = useRef(null);
+  const userHasInteractedRef = useRef(false);
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
   const [placeData, setPlaceData] = useState();
   const [activeFeature, setActiveFeature] = useState();
@@ -34,20 +35,56 @@ const Map = ({ isAuthenticated }) => {
       .catch((err) => alert('Error fetching places geoJSON:', err));
   };
 
+  const spinGlobe = () => {
+    const center = mapRef.current.getCenter();
+    center.lng -= 4;
+
+    mapRef.current.easeTo({
+      center,
+      duration: 1000,
+      easing: (n) => n,
+    });
+  };
+
+  const handleUserInteraction = () => {
+    userHasInteractedRef.current = true;
+    mapRef.current.off('mousedown', handleUserInteraction);
+    mapRef.current.off('touchstart', handleUserInteraction);
+    mapRef.current.off('wheel', handleUserInteraction);
+    mapRef.current.off('dblclick', handleUserInteraction);
+  };
+
   useEffect(() => {
     if (!hasBeenInitialized && mapContainerRef.current) {
-      console.log('Initializing map for the first time...');
-
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current,
-        center: [22.1194, 51.9013],
+        center: [22, 48],
         zoom: 2.54,
       });
 
       fetchPlaces();
 
       mapRef.current.on('load', () => {
-        console.log('Map loaded!');
+        // mapRef.current.setFog({
+        //   // range: [-1, 2],
+        //   // 'horizon-blend': 0.3,
+        //   // color: '#242B4B',
+        //   // 'high-color': '#161B36',
+        //   // 'space-color': '#0B1026',
+        //   // 'star-intensity': 0.8,
+        // });
+        spinGlobe();
+      });
+
+      mapRef.current.on('mousedown', handleUserInteraction);
+      mapRef.current.on('touchstart', handleUserInteraction);
+      mapRef.current.on('wheel', handleUserInteraction);
+      mapRef.current.on('dblclick', handleUserInteraction);
+
+      mapRef.current.on('moveend', () => {
+        if (!userHasInteractedRef.current) {
+          spinGlobe();
+        }
       });
 
       setHasBeenInitialized(true);
