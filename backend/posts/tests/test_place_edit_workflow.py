@@ -1,6 +1,8 @@
 import pytest
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from rest_framework.test import APIClient
+from rest_framework import status
 import factory
 
 from posts.models import Place
@@ -51,3 +53,30 @@ class TestPlaceEditWorkflow:
         self.other_user = UserFactory()
         self.place = PlaceFactory(author=self.user)
         self.client.force_authenticate(user=self.user)
+
+    def test_edit_place_basic_fields_success(self):
+        """Test successful editing of basic place fields"""
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {
+            "name": "Updated Place Name",
+            "subtitle": "Updated subtitle",
+            "description": "Updated description",
+            "longitude": -122.4194,
+            "latitude": 37.7749,
+            "category": "city",
+            "rating": 4.5,
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["name"] == data["name"]
+
+        self.place.refresh_from_db()
+        assert self.place.name == "Updated Place Name"
+        assert self.place.subtitle == "Updated subtitle"
+        assert self.place.description == "Updated description"
+        assert float(self.place.longitude) == -122.4194
+        assert float(self.place.latitude) == 37.7749
+        assert self.place.category == "city"
+        assert float(self.place.rating) == 4.5
