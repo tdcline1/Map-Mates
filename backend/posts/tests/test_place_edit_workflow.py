@@ -426,3 +426,75 @@ class TestPlaceEditWorkflow:
         assert thumbnail_count == 1
         thumbnail_image = self.place.images.filter(is_thumbnail=True).first()
         assert thumbnail_image.caption == "New thumbnail"
+
+    def test_edit_place_response_structure(self):
+        """Test full response structure after editing, adding and updating images"""
+        existing_image_to_keep = PlaceImageFactory(
+            place=self.place,
+            caption="Keep me",
+            is_thumbnail=False,
+        )
+        existing_image_to_delete = PlaceImageFactory(
+            place=self.place,
+            caption="Delete me",
+            is_thumbnail=False,
+        )
+        new_image = self.create_test_image_file("new_image.jpg")
+
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {
+            "name": "Full Update",
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": "nature",
+            "rating": 3.5,
+            "existing_images_ids": [str(existing_image_to_keep.id)],
+            "existing_images_captions": ["Updated caption"],
+            "existing_images_thumbnails": ["false"],
+            "images_to_delete": [str(existing_image_to_delete.id)],
+            "images_files": [new_image],
+            "images_captions": ["Brand new image"],
+            "images_thumbnails": ["true"],
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_200_OK
+
+        response_data = response.data
+        expected_fields = [
+            "id",
+            "name",
+            "subtitle",
+            "description",
+            "longitude",
+            "latitude",
+            "category",
+            "author",
+            "rating",
+            "images",
+            "is_owner",
+        ]
+
+        for field in expected_fields:
+            assert field in response_data, f"Missing field: {field}"
+
+        assert response_data["name"] == "Full Update"
+        assert response_data["author"] == self.user.username
+        assert response_data["is_owner"] == True
+        assert response_data["rating"] == 3.5
+
+        images = response_data["images"]
+        assert isinstance(images, list)
+        assert len(images) == 2
+
+        captions = [img["caption"] for img in images]
+        assert "Updated caption" in captions
+        assert "Brand new image" in captions
+        assert "Delete me" not in captions
+
+        thumbnail_images = [img for img in images if img["is_thumbnail"]]
+        assert len(thumbnail_images) == 1
+        assert thumbnail_images[0]["caption"] == "Brand new image"
