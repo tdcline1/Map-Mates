@@ -274,3 +274,31 @@ class TestPlaceEditWorkflow:
         new_image_obj = self.place.images.filter(is_thumbnail=True).first()
         assert new_image_obj is not None
         assert new_image_obj.caption == "New image caption"
+
+    def test_edit_place_mismatched_image_data_error(self):
+        """Test error when image files, captions, and thumbnails don't match"""
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+
+        image1 = self.create_test_image_file("test1.jpg")
+
+        data = {
+            "name": self.place.name,
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": self.place.rating,
+            "images_files": [image1],
+            "images_captions": [
+                "Caption 1",
+                "Caption 2",
+            ],  # Mismatch: 2 captions for 1 file
+            "images_thumbnails": ["true"],
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "Mismatched number" in response.data["error"]
+
