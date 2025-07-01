@@ -344,3 +344,13 @@ class TestPlaceEditWorkflow:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert self.place.name != data["name"]
 
+    def test_edit_place_unauthenticated_user(self):
+        """Test that unauthenticated users cannot edit places"""
+        self.client.force_authenticate(user=None)
+
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {"name": "Unauthenticated Edit"}
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
