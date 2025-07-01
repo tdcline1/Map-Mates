@@ -373,3 +373,21 @@ class TestPlaceEditWorkflow:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "rating" in response.data  # Ensure error is about rating
 
+    def test_edit_place_invalid_coordinates(self):
+        """Test validation for longitude/latitude"""
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+
+        data = {
+            "name": self.place.name,
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": 200.0,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": self.place.rating,
+        }
+
+        response = self.client.put(url, data, format="multipart")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "longitude" in response.data
+
