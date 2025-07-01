@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 from .models import Place, PlaceImage
 from .serializers import PlaceDetailSerializer, PlaceGeoJSONSerializer
+from .permissions import IsAuthorOrReadOnly
 
 
 class PlaceList(generics.ListCreateAPIView):
@@ -60,6 +61,7 @@ class PlaceList(generics.ListCreateAPIView):
 class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Place.objects.select_related("author").prefetch_related("images")
     serializer_class = PlaceDetailSerializer
+    permission_classes = [IsAuthorOrReadOnly]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
