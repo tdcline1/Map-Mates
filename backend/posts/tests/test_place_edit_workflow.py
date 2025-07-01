@@ -14,7 +14,7 @@ import factory
 from io import BytesIO
 from PIL import Image as PillowImage
 
-from posts.models import Place
+from posts.models import Place, PlaceImage
 
 User = get_user_model()
 
@@ -45,6 +45,32 @@ class PlaceFactory(factory.django.DjangoModelFactory):
     category = factory.Iterator(["nature", "city", "other"])
     rating = factory.Faker("random_element", elements=[i * 0.5 for i in range(11)])
     author = factory.SubFactory(UserFactory)
+
+
+class PlaceImageFactory(factory.django.DjangoModelFactory):
+    """Factory for creating PlaceImage instances"""
+
+    class Meta:
+        model = PlaceImage
+
+    place = factory.SubFactory(PlaceFactory)
+    caption = factory.Faker("sentence", nb_words=3)
+    is_thumbnail = False
+    order = factory.Sequence(lambda n: n)
+
+    # @factory.lazy_attribute generates a field(using logic, not a simple data type) when calling the factory
+    @factory.lazy_attribute
+    def image(self):
+        """Create a simple test image"""
+        image = PillowImage.new("RGB", (100, 100), color="red")
+        # Save image to an in-memory file (BytesIO)
+        temp_file = BytesIO()
+        image.save(temp_file, format="JPEG")
+        temp_file.seek(0)
+        # Return a Django SimpleUploadedFile instance(mimics a file upload)
+        return SimpleUploadedFile(
+            name="test_image.jpg", content=temp_file.read(), content_type="image/jpeg"
+        )
 
 
 # Pytest blocks tests from touching database unless explicitly marked @pytest.mark.django_db
@@ -130,3 +156,38 @@ class TestPlaceEditWorkflow:
         assert thumbnail_image.caption == "Caption 1"
         non_thumbnail = self.place.images.filter(is_thumbnail=False).first()
         assert non_thumbnail.caption == "Caption 2"
+
+    def test_edit_place_update_existing_images(self):
+        """Test updating existing images metadata"""
+        image1 = PlaceImageFactory(
+            place=self.place, caption="Original Caption 1", is_thumbnail=True
+        )
+        image2 = PlaceImageFactory(
+            place=self.place, caption="Original Caption 2", is_thumbnail=False
+        )
+
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {
+            "name": self.place.name,
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": self.place.rating,
+            "existing_images_ids": [str(image1.id), str(image2.id)],
+            "existing_images_captions": ["Updated Caption 1", "Updated Caption 2"],
+            "existing_images_thumbnails": ["false", "true"],
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_200_OK
+
+        image1.refresh_from_db()
+        image2.refresh_from_db()
+
+        assert image1.caption == "Updated Caption 1"
+        assert image1.is_thumbnail == False
+        assert image2.caption == "Updated Caption 2"
+        assert image2.is_thumbnail == True
