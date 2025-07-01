@@ -302,3 +302,26 @@ class TestPlaceEditWorkflow:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "Mismatched number" in response.data["error"]
 
+    def test_edit_place_invalid_existing_image_id(self):
+        """Test handling of invalid existing image IDs"""
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+
+        data = {
+            "name": self.place.name,
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": self.place.rating,
+            "existing_images_ids": ["999999"],  # Non-existent ID
+            "existing_images_captions": ["Some caption"],
+            "existing_images_thumbnails": ["true"],
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        # Should succeed but ignore invalid ID (as per DoesNotExist handling)
+        assert response.status_code == status.HTTP_200_OK
+        assert self.place.images.count() == 0
+
