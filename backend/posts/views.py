@@ -118,6 +118,7 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=serializer_data, partial=True)
         if serializer.is_valid():
             self.perform_update(serializer)
+            instance.refresh_from_db()
             updated_serializer = self.get_serializer(instance)
             return Response(updated_serializer.data, status=status.HTTP_200_OK)
 
