@@ -354,3 +354,22 @@ class TestPlaceEditWorkflow:
         response = self.client.put(url, data, format="multipart")
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_edit_place_invalid_rating(self):
+        """Test rating validation"""
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+
+        data = {
+            "name": self.place.name,
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": 6.0,
+        }
+
+        response = self.client.put(url, data, format="multipart")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "rating" in response.data  # Ensure error is about rating
+
