@@ -191,3 +191,33 @@ class TestPlaceEditWorkflow:
         assert image1.is_thumbnail == False
         assert image2.caption == "Updated Caption 2"
         assert image2.is_thumbnail == True
+
+    def test_edit_place_delete_existing_images(self):
+        """Test deleting existing images from place"""
+        image1 = PlaceImageFactory(place=self.place)
+        image2 = PlaceImageFactory(place=self.place)
+        image3 = PlaceImageFactory(place=self.place)
+
+        initial_count = self.place.images.count()
+        assert initial_count == 3
+
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {
+            "name": self.place.name,
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": self.place.rating,
+            "images_to_delete": [str(image1.id), str(image2.id)],
+            "existing_images_ids": [str(image3.id)],
+            "existing_images_captions": [image3.caption],
+            "existing_images_thumbnails": ["true"],
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert self.place.images.count() == 1
+        assert self.place.images.first().id == image3.id
