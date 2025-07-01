@@ -325,3 +325,22 @@ class TestPlaceEditWorkflow:
         assert response.status_code == status.HTTP_200_OK
         assert self.place.images.count() == 0
 
+    def test_edit_place_unauthorized_user(self):
+        """Test that users cannot edit other user's places"""
+        self.client.force_authenticate(user=self.other_user)
+
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {
+            "name": "Unauthorized Edit",
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": self.place.rating,
+        }
+
+        response = self.client.put(url, data, format="multipart")
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert self.place.name != data["name"]
+
