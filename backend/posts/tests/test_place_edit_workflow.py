@@ -221,3 +221,56 @@ class TestPlaceEditWorkflow:
         assert response.status_code == status.HTTP_200_OK
         assert self.place.images.count() == 1
         assert self.place.images.first().id == image3.id
+
+    def test_edit_place_mixed_operations(self):
+        """Test Place edit operation that includes add, update, and delete images"""
+        existing_image_to_keep = PlaceImageFactory(
+            place=self.place, caption="Keep me", is_thumbnail=True
+        )
+        existing_image_to_delete = PlaceImageFactory(
+            place=self.place, caption="Delete me"
+        )
+
+        new_image = self.create_test_image_file("brand_new.jpg")
+
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {
+            "name": "Complex Update",
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": "nature",
+            "rating": 3.5,
+            # Keep and update existing_image1
+            "existing_images_ids": [str(existing_image_to_keep.id)],
+            "existing_images_captions": ["Updated kept image"],
+            "existing_images_thumbnails": ["false"],
+            # Delete existing_image2
+            "images_to_delete": [str(existing_image_to_delete.id)],
+            # Add new image
+            "images_files": [new_image],
+            "images_captions": ["New image caption"],
+            "images_thumbnails": ["true"],
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_200_OK
+
+        self.place.refresh_from_db()
+        assert self.place.name == "Complex Update"
+        assert self.place.category == "nature"
+        assert float(self.place.rating) == 3.5
+
+        assert self.place.images.count() == 2
+
+        existing_image_to_keep.refresh_from_db()
+        assert existing_image_to_keep.caption == "Updated kept image"
+        assert existing_image_to_keep.is_thumbnail == False
+
+        assert not PlaceImage.objects.filter(id=existing_image_to_delete.id).exists()
+
+        new_image_obj = self.place.images.filter(is_thumbnail=True).first()
+        assert new_image_obj is not None
+        assert new_image_obj.caption == "New image caption"
