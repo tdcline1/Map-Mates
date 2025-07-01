@@ -498,3 +498,14 @@ class TestPlaceEditWorkflow:
         thumbnail_images = [img for img in images if img["is_thumbnail"]]
         assert len(thumbnail_images) == 1
         assert thumbnail_images[0]["caption"] == "Brand new image"
+
+    def test_edit_place_nonexistent_place(self):
+        """Test that editing a non-existent place returns 404"""
+        non_existent_id = 999999
+        url = reverse("place_detail", kwargs={"pk": non_existent_id})
+        data = {"name": "Non-existent Place"}
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert str(response.data["detail"]) == "No Place matches the given query."
