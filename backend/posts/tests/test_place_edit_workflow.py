@@ -391,3 +391,38 @@ class TestPlaceEditWorkflow:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "longitude" in response.data
 
+    def test_edit_place_thumbnail_uniqueness(self):
+        """Test that only one image can be marked as thumbnail"""
+        image1 = PlaceImageFactory(place=self.place, is_thumbnail=True)
+        image2 = PlaceImageFactory(place=self.place, is_thumbnail=False)
+
+        new_image = self.create_test_image_file("new_thumbnail.jpg")
+
+        url = reverse("place_detail", kwargs={"pk": self.place.id})
+        data = {
+            "name": self.place.name,
+            "subtitle": self.place.subtitle,
+            "description": self.place.description,
+            "longitude": self.place.longitude,
+            "latitude": self.place.latitude,
+            "category": self.place.category,
+            "rating": self.place.rating,
+            "existing_images_ids": [str(image1.id), str(image2.id)],
+            "existing_images_captions": [image1.caption, image2.caption],
+            "existing_images_thumbnails": [
+                "true",
+                "false",
+            ],
+            "images_files": [new_image],
+            "images_captions": ["New thumbnail"],
+            "images_thumbnails": ["true"],
+        }
+
+        response = self.client.put(url, data, format="multipart")
+
+        assert response.status_code == status.HTTP_200_OK
+
+        thumbnail_count = self.place.images.filter(is_thumbnail=True).count()
+        assert thumbnail_count == 1
+        thumbnail_image = self.place.images.filter(is_thumbnail=True).first()
+        assert thumbnail_image.caption == "New thumbnail"
