@@ -1,4 +1,6 @@
+import pytest
 from django.contrib.auth import get_user_model
+from rest_framework.test import APIClient
 import factory
 
 from posts.models import Place
@@ -34,3 +36,18 @@ class PlaceFactory(factory.django.DjangoModelFactory):
         "pydecimal", left_digits=1, right_digits=1, min_value=0, max_value=5
     )
     author = factory.SubFactory(UserFactory)
+
+
+# Pytest blocks tests from touching database unless explicitly marked @pytest.mark.django_db
+@pytest.mark.django_db
+class TestPlaceEditWorkflow:
+    """Comprehensive tests for the Place edit workflow"""
+
+    def setup_method(self):
+        """Set up test data before each test method"""
+        # REST Framework APIClient simulates browser/frontend making requests to views
+        self.client = APIClient()
+        self.user = UserFactory()
+        self.other_user = UserFactory()
+        self.place = PlaceFactory(author=self.user)
+        self.client.force_authenticate(user=self.user)
