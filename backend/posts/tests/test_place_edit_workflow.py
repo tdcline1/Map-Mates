@@ -1,3 +1,9 @@
+# Running Tests
+# - All tests: `pytest`
+# - Place edit tests: `pytest posts/tests/test_place_edit_workflow.py -v`
+# - With coverage: `pytest --cov=posts --cov-report=html`
+# - Specific test: `pytest posts/tests/test_place_edit_workflow.py::TestPlaceEditWorkflow::test_edit_place_basic_fields_success -v`
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
