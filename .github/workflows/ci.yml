@@ -1,0 +1,133 @@
+name: Django + React CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: 3.13
+  NODE_VERSION: 20
+
+jobs:
+  backend-test:
+    name: Django Backend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install system dependencies for Pillow (image processing)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libjpeg-dev \
+            libpng-dev \
+            libwebp-dev \
+            libfreetype6-dev \
+            liblcms2-dev \
+            libopenjp2-7-dev \
+            libtiff5-dev
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Set Django settings for testing
+        run: |
+          echo "DJANGO_SETTINGS_MODULE=django_project.settings_test" >> $GITHUB_ENV
+          echo "SECRET_KEY=test-secret-key-for-ci-only" >> $GITHUB_ENV
+      
+      - name: Run Django system checks
+        run: python manage.py check
+      
+      - name: Run database migrations (creates test SQLite database)
+        run: python manage.py migrate
+      
+      - name: Run tests with coverage
+        run: |
+          coverage run -m pytest -v --tb=short
+          coverage report --show-missing
+      
+      # - name: Generate coverage XML (for coverage upload)
+      #   run: coverage xml
+      
+      # - name: Upload coverage to Codecov (optional - shows test coverage %)
+      #   uses: codecov/codecov-action@v3
+      #   if: github.repository_owner == github.actor
+      #   with:
+      #     file: ./coverage.xml
+      #     fail_ci_if_error: false
+
+  backend-quality:
+    name: Django Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install code quality tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort flake8
+      
+      - name: Check code formatting with Black
+        run: black --check --diff .
+      
+      - name: Check import sorting with isort
+        run: isort --check-only --diff .
+      
+      - name: Run flake8 linting (checks code style)
+        run: flake8 . --count --statistics
+
+  frontend-quality:
+    name: React Frontend Quality
+    runs-on: ubuntu-latest
+    # Only run if you have a package.json file in frontend directory
+    if: hashFiles('frontend/package.json') != ''
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run ESLint (JavaScript/React linting)
+        run: npm run lint
+      
+      - name: Check Prettier formatting
+        run: npm run format:check
+      
+      # Optional: Build to make sure everything compiles
+      - name: Build frontend
+        run: npm run build
