@@ -103,8 +103,6 @@ jobs:
   frontend-quality:
     name: React Frontend Quality
     runs-on: ubuntu-latest
-    # Only run if you have a package.json file in frontend directory
-    if: ${{ hashFiles('frontend/package.json') != '' }}
     defaults:
       run:
         working-directory: ./frontend
