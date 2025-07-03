@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
       const currentTime = Date.now() / 1000;
       return decoded.exp > currentTime;
     } catch (err) {
+      console.warn('Invalid token:', err.message);
       return false;
     }
   };

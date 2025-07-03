@@ -2,15 +2,9 @@ import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { createPortal } from 'react-dom';
 
-// town options
 import natureIcon from '../assets/icons/nature/tent-tree.svg';
 import cityIcon from '../assets/icons/city/city.svg';
 import defaultIcon from '../assets/icons/city/ranger-station.svg';
-
-// hike options
-// import natureIcon from '../assets/icons/nature/gtrees.svg';
-// import cityIcon from '../assets/icons/nature/ghiking_dude.svg';
-// import defaultIcon from '../assets/icons/nature/tent-tree.svg';
 
 const Marker = ({ map, feature, isActive, onClick }) => {
   const { geometry, properties } = feature;
