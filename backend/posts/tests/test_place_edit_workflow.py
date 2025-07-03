@@ -188,9 +188,9 @@ class TestPlaceEditWorkflow:
         image2.refresh_from_db()
 
         assert image1.caption == "Updated Caption 1"
-        assert image1.is_thumbnail == False
+        assert image1.is_thumbnail is False
         assert image2.caption == "Updated Caption 2"
-        assert image2.is_thumbnail == True
+        assert image2.is_thumbnail is True
 
     def test_edit_place_delete_existing_images(self):
         """Test deleting existing images from place"""
@@ -267,7 +267,7 @@ class TestPlaceEditWorkflow:
 
         existing_image_to_keep.refresh_from_db()
         assert existing_image_to_keep.caption == "Updated kept image"
-        assert existing_image_to_keep.is_thumbnail == False
+        assert existing_image_to_keep.is_thumbnail is False
 
         assert not PlaceImage.objects.filter(id=existing_image_to_delete.id).exists()
 
@@ -483,7 +483,7 @@ class TestPlaceEditWorkflow:
 
         assert response_data["name"] == "Full Update"
         assert response_data["author"] == self.user.username
-        assert response_data["is_owner"] == True
+        assert response_data["is_owner"] is True
         assert response_data["rating"] == 3.5
 
         images = response_data["images"]
