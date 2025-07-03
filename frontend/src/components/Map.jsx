@@ -46,14 +46,14 @@ const Map = ({ isAuthenticated }) => {
     });
   };
 
-  const handleUserInteraction = () => {
-    userHasInteractedRef.current = true;
-    mapRef.current.off('mousedown', handleUserInteraction);
-    mapRef.current.off('touchstart', handleUserInteraction);
-    mapRef.current.off('wheel', handleUserInteraction);
-  };
-
   useEffect(() => {
+    const handleUserInteraction = () => {
+      userHasInteractedRef.current = true;
+      mapRef.current.off('mousedown', handleUserInteraction);
+      mapRef.current.off('touchstart', handleUserInteraction);
+      mapRef.current.off('wheel', handleUserInteraction);
+    };
+
     if (!hasBeenInitialized && mapContainerRef.current) {
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current,
