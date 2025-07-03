@@ -3,7 +3,6 @@ from django.test import TestCase
 from django.urls import reverse
 from posts.models import Place
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 
 class PlaceModelTests(TestCase):
