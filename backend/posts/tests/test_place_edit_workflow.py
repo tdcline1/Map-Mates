@@ -4,17 +4,18 @@
 # - With coverage: `pytest --cov=posts --cov-report=html`
 # - Specific test: `pytest posts/tests/test_place_edit_workflow.py::TestPlaceEditWorkflow::test_edit_place_basic_fields_success -v`
 
+from io import BytesIO
+
+import factory
 import pytest
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-from rest_framework.test import APIClient
-from rest_framework import status
-import factory
-from io import BytesIO
 from PIL import Image as PillowImage
-
 from posts.models import Place, PlaceImage
+from rest_framework import status
+from rest_framework.test import APIClient
+
 
 User = get_user_model()
 

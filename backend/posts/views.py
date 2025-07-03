@@ -2,8 +2,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from .models import Place, PlaceImage
-from .serializers import PlaceDetailSerializer, PlaceGeoJSONSerializer
 from .permissions import IsAuthorOrReadOnly
+from .serializers import PlaceDetailSerializer, PlaceGeoJSONSerializer
 
 
 class PlaceList(generics.ListCreateAPIView):

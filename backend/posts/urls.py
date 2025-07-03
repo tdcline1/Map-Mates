@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import PlaceList, PlaceDetailView, PlaceGeoJSONView
+from .views import PlaceDetailView, PlaceGeoJSONView, PlaceList
 
 urlpatterns = [
     path("<int:pk>/", PlaceDetailView.as_view(), name="place_detail"),
