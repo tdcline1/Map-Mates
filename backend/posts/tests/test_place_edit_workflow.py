@@ -1,4 +1,4 @@
-# Running Tests
+# Running Tests (Backend directory)
 # - All tests: `pytest`
 # - Place edit tests: `pytest posts/tests/test_place_edit_workflow.py -v`
 # - With coverage: `pytest --cov=posts --cov-report=html`

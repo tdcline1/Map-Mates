@@ -18,6 +18,11 @@ class PlaceModelTests(TestCase):
             author=cls.user,
             name="A good name",
             description="Nice description",
+            subtitle="Updated subtitle",
+            longitude=-122.4194,
+            latitude=37.7749,
+            category="city",
+            rating=4.5,
         )
         cls.list_url = reverse("place_list")
         cls.detail_url = reverse("place_detail", args=[cls.place.id])
