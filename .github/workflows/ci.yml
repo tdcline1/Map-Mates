@@ -59,10 +59,6 @@ jobs:
       - name: Run Django system checks
         run: python manage.py check
 
-      - name: Run database migrations (creates test SQLite database)
-        run: python manage.py migrate
-        working-directory: ./backend
-
       - name: Run tests with coverage
         run: |
           coverage run -m pytest -v --tb=short
