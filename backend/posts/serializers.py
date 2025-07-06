@@ -108,7 +108,6 @@ class PlaceGeoJSONSerializer(serializers.ModelSerializer):
         thumbnail = place.get_thumbnail()
         thumbnail_url = None
         if thumbnail and thumbnail.image:
-            # access the request object provided by the view in the context dict so that we can build absolute url... Frontend will not be able to access relative url provided by thumbnail.image.url as backend and frontend are on separate domains
             request = self.context.get("request")
             thumbnail_url = request.build_absolute_uri(thumbnail.image.url)
         return {

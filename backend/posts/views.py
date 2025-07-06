@@ -102,7 +102,10 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
             if not (len(image_files) == len(image_captions) == len(image_thumbnails)):
                 return Response(
                     {
-                        "error": "Mismatched number of image files, captions or thumbnail designations"
+                        "error": (
+                            "Mismatched number of image files, captions or"
+                            " thumbnail designations"
+                        )
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
