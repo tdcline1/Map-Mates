@@ -100,7 +100,9 @@ const PlaceDetails = ({
           )}
         </div>
 
-        {placeData.description && <p>{placeData.description}</p>}
+        {placeData.description && (
+          <pre className="description-display">{placeData.description}</pre>
+        )}
 
         {/* Photo Carousel */}
         {placeData.images && placeData.images.length > 0 && (

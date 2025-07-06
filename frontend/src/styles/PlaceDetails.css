@@ -466,3 +466,16 @@
     width: calc(100% - 32px);
   }
 }
+
+.description-display {
+  white-space: pre-wrap;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
