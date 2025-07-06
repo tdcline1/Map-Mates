@@ -60,7 +60,7 @@ class Place(models.Model):
         return self.images.filter(is_thumbnail=True).first()
 
     def get_images(self):
-        """Return all images associated with a specific place...used in carousel"""
+        """Return all images associated with a place, used in carousel"""
         return self.images.all()
 
 
@@ -76,7 +76,8 @@ def validate_image_size(image):
 
 class PlaceImage(models.Model):
     """
-    Represents an image associated with a specific place. One image/place marked as thumbnail.
+    Represents an image associated with a specific place.
+    One image/place marked as thumbnail.
     """
 
     place = models.ForeignKey(Place, related_name="images", on_delete=models.CASCADE)
