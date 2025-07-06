@@ -36,15 +36,7 @@ jobs:
 
       - name: Install system dependencies for Pillow (image processing)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libjpeg-dev \
-            libpng-dev \
-            libwebp-dev \
-            libfreetype6-dev \
-            liblcms2-dev \
-            libopenjp2-7-dev \
-            libtiff5-dev
+          sudo apt-get install -y libjpeg-dev libpng-dev
 
       - name: Install Python dependencies
         run: |
