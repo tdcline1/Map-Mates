@@ -7,8 +7,9 @@ class PlaceImageSerializer(serializers.ModelSerializer):
     """
     Serializer for the PlaceImage model.
 
-    Handles the creation, update and reppressentation of images associated with a Place.
-    Includes fields for image(file) upload, url for frontend access, captioning, and thumbnail designation
+    Handles the creation, update, and representation of images associated with a
+    Place. Includes fields for image (file) upload, URL for frontend access,
+    captioning, and thumbnail designation.
     """
 
     image = serializers.ImageField(write_only=True)
@@ -80,13 +81,15 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
 
 class PlaceGeoJSONSerializer(serializers.ModelSerializer):
     """
-    Serializer for the Place model, formats the output as a GeoJSON Feature for map display.
+    Serializer for the Place model. Formats the output as a GeoJSON Feature
+    for map display.
 
-    This serialilzer transformss the Place model instances into GeoJSON Feature objects,
-    including feometry (Point based on longitude and latitude) and properties
-    such as name, subtitle, category, thumbnail URL, and rating.
-    This format, as supplemented by its associated view, ensures the data is structured
-    as expected by the mapbox API.
+    This serializer transforms Place model instances into GeoJSON Feature
+    objects, including geometry (Point based on longitude and latitude) and
+    properties such as name, subtitle, category, thumbnail URL, and rating.
+
+    This format, as supplemented by its associated view, ensures the data is
+    structured as expected by the Mapbox API.
     """
 
     geometry = serializers.SerializerMethodField()

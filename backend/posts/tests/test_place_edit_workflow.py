@@ -2,7 +2,7 @@
 # - All tests: `pytest`
 # - Place edit tests: `pytest posts/tests/test_place_edit_workflow.py -v`
 # - With coverage: `pytest --cov=posts --cov-report=html`
-# - Specific test: `pytest posts/tests/test_place_edit_workflow.py::TestPlaceEditWorkflow::test_edit_place_basic_fields_success -v`
+# - Specific test: `pytest posts/tests/test_place_edit_workflow.py::TestPlaceEditWorkflow::test_edit_place_basic_fields_success -v`  # noqa: E501
 
 from io import BytesIO
 
@@ -58,7 +58,7 @@ class PlaceImageFactory(factory.django.DjangoModelFactory):
     is_thumbnail = False
     order = factory.Sequence(lambda n: n)
 
-    # @factory.lazy_attribute generates a field(using logic, not a simple data type) when calling the factory
+    # @factory.lazy_attribute generates a field(using logic, not a simple data type) when calling the factory  # noqa: E501
     @factory.lazy_attribute
     def image(self):
         """Create a simple test image"""
