@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 import Map from './components/Map';
 import WelcomeOverlay from './components/WelcomeOverlay';
+import TopPlacesList from './components/TopPlacesList';
 import { setupApiInterceptors } from './api';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
@@ -41,6 +42,18 @@ function AppContent() {
     () => setActiveOverlay('register'),
     []
   );
+  const handleTopUSHikesClick = useCallback(
+    () => setActiveOverlay('us-hikes'),
+    []
+  );
+  const handleTopEuropeanHikesClick = useCallback(
+    () => setActiveOverlay('european-hikes'),
+    []
+  );
+  const handleTopEuropeanCitiesClick = useCallback(
+    () => setActiveOverlay('european-cities'),
+    []
+  );
 
   return (
     <>
@@ -50,6 +63,9 @@ function AppContent() {
         onLogout={logout}
         onLoginClick={handleLoginClick}
         onRegisterClick={handleRegisterClick}
+        onTopUSHikesClick={handleTopUSHikesClick}
+        onTopEuropeanHikesClick={handleTopEuropeanHikesClick}
+        onTopEuropeanCitiesClick={handleTopEuropeanCitiesClick}
       />
       <Map isAuthenticated={isAuthenticated} />
 
@@ -69,6 +85,16 @@ function AppContent() {
           onClose={handleCloseOverlay}
           onLoginClick={handleLoginClick}
         />
+      )}
+
+      {activeOverlay == 'us-hikes' && (
+        <TopPlacesList type="us-hikes" onClose={handleCloseOverlay} />
+      )}
+      {activeOverlay == 'european-hikes' && (
+        <TopPlacesList type="european-hikes" onClose={handleCloseOverlay} />
+      )}
+      {activeOverlay === 'european-cities' && (
+        <TopPlacesList type="european-cities" onClose={handleCloseOverlay} />
       )}
 
       <main>
