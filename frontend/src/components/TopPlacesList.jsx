@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { api } from '../api'; // Use your existing api setup
+import api from '../api';
 import '../styles/TopPlacesList.css';
 
 const TopPlacesList = ({ type, onClose }) => {
