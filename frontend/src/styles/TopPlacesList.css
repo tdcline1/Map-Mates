@@ -16,9 +16,12 @@
   border-radius: 8px;
   max-width: 600px;
   width: 90%;
-  max-height: 100vh;
+  max-height: 80vh;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-header {
@@ -27,6 +30,7 @@
   align-items: center;
   padding: 20px;
   border-bottom: 1px solid #eee;
+  position: relative;
 }
 
 .modal-header h2 {
@@ -38,25 +42,52 @@
 .close-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
   color: #666;
   padding: 0;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 10px;
 }
 
 .close-button:hover {
   color: #000;
+  background-color: #f0f0f0;
 }
 
 .modal-content {
-  padding: 20px;
+  padding: 20px 8px 20px 20px;
   max-height: 60vh;
   overflow-y: auto;
+  flex: 1;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f0f0f0;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }
 
 .loading,
