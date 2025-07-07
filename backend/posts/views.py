@@ -132,6 +132,15 @@ class PlaceGeoJSONView(generics.ListAPIView):
     queryset = Place.objects.all()
     serializer_class = PlaceGeoJSONSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category = self.request.query_params.get("category", None)
+
+        if category:
+            queryset = queryset.filter(category=category)
+
+        return queryset.order_by("-rating")
+
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
