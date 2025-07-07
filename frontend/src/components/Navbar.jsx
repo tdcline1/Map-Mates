@@ -8,6 +8,9 @@ const Navbar = ({
   onLogout,
   onLoginClick,
   onRegisterClick,
+  onTopUSHikesClick,
+  onTopEuropeanHikesClick,
+  onTopEuropeanCitiesClick,
 }) => {
   return (
     <nav className="navbar">
@@ -17,15 +20,18 @@ const Navbar = ({
         </Link>
       </div>
       <div className="nav-right">
-        <Link to="/map" className="nav-link">
-          Map
-        </Link>
-        <Link to="/places" className="nav-link">
-          Top Hikes
-        </Link>
-        <Link to="/top-cities" className="nav-link">
-          Top Cities
-        </Link>
+        <button className="top-places-button" onClick={onTopUSHikesClick}>
+          Top US Hikes
+        </button>
+        <button className="top-places-button" onClick={onTopEuropeanHikesClick}>
+          Top European Hikes
+        </button>
+        <button
+          className="top-places-button"
+          onClick={onTopEuropeanCitiesClick}
+        >
+          Top European Cities
+        </button>
 
         {isAuthenticated ? (
           <>
