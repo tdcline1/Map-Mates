@@ -28,10 +28,23 @@
   color: #333;
 }
 
-.logout-button {
-  background-color: #ddd;
+.top-places-buttons {
+  display: flex;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+.top-places-button {
+  padding: 8px 16px;
+  background-color: #c0c0c0;
+  color: black;
   border: none;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
   border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.top-places-button:hover {
+  background-color: #48af5b;
 }

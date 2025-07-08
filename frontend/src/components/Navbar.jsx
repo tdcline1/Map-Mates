@@ -36,16 +36,16 @@ const Navbar = ({
         {isAuthenticated ? (
           <>
             <span className="auth-text">Hello, {userName}</span>
-            <button onClick={onLogout} className="logout-button">
+            <button onClick={onLogout} className="top-places-button">
               Logout
             </button>
           </>
         ) : (
           <>
-            <button className="logout-button" onClick={onLoginClick}>
+            <button className="top-places-button" onClick={onLoginClick}>
               Login
             </button>
-            <button className="logout-button" onClick={onRegisterClick}>
+            <button className="top-places-button" onClick={onRegisterClick}>
               Register
             </button>
           </>
