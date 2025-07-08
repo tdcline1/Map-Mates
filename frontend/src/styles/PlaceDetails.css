@@ -304,7 +304,6 @@
 
 .image-caption {
   text-align: center;
-  margin: 16px 24px 8px 24px;
   font-style: italic;
   color: #666;
   font-size: 0.9rem;
@@ -314,7 +313,9 @@
   border-radius: 8px;
   border-left: 3px solid #4a90e2;
   box-sizing: border-box;
-  width: calc(100% - 48px);
+  width: 80%;
+  max-width: 500px;
+  margin: 16px auto 8px auto;
 }
 
 .carousel-dots {
@@ -409,10 +410,7 @@
   }
 
   .image-caption {
-    margin-left: 20px;
-    margin-right: 20px;
     font-size: 0.85rem;
-    width: calc(100% - 40px);
   }
 }
 
@@ -458,12 +456,6 @@
 
   .carousel-button-next {
     right: 8px;
-  }
-
-  .image-caption {
-    margin-left: 16px;
-    margin-right: 16px;
-    width: calc(100% - 32px);
   }
 }
 
