@@ -81,6 +81,12 @@ const AddPlaceForm = ({
     setExistingImages(existingImages.filter((img) => img.id !== imageId));
   };
 
+  /**
+   * Updates a new image's properties with validation
+   * @param {number} index - Index of image in newImages array
+   * @param {string} field - Field to update ('file', 'caption', 'is_thumbnail')
+   * @param {*} value - New value for the field
+   */
   const updateNewImage = (index, field, value) => {
     const updatedImages = [...newImages];
     if (field === 'file') {
@@ -149,9 +155,9 @@ const AddPlaceForm = ({
   };
 
   /**
-   * Handle form Submission
-   * 1. Assemble FormData object
-   * 2. Send FormData object to API via Post (new) or Put (edit)
+   * Assembles FormData object for API submission
+   * Uses parallel arrays to handle complex image relationships
+   * due to FormData's limitation with nested objects
    */
   const handleSubmit = async (e) => {
     e.preventDefault();

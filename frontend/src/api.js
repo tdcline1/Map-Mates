@@ -1,5 +1,12 @@
 import axios from 'axios';
 
+/**
+ * Axios API Configuration
+ *
+ * Configures HTTP client with JWT authentication interceptors.
+ * Handles automatic token attachment and refresh on 401 responses.
+ */
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
@@ -10,6 +17,11 @@ const isPublicEndpoint = (url) => {
   return publicEndpoints.some((endpoint) => url.includes(endpoint));
 };
 
+/**
+ * Sets up request/response interceptors for JWT authentication
+ * @param {Function} getAccessToken - Function to retrieve access token
+ * @param {Function} logout - Function to handle user logout
+ */
 export const setupApiInterceptors = (getAccessToken, logout) => {
   // Request interceptor to add token header
   api.interceptors.request.use(

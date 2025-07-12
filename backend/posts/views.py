@@ -59,13 +59,36 @@ class PlaceList(generics.ListCreateAPIView):
 
 
 class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint for retrieving, updating, and deleting Place instances.
+
+    Handles complex image management including:
+    - Updating existing image metadata
+    - Adding new images with file uploads
+    - Deleting specified images
+    - Maintaining thumbnail relationships
+
+    Optimized with select_related and prefetch_related to minimize database queries.
+    """
+
     queryset = Place.objects.select_related("author").prefetch_related("images")
     serializer_class = PlaceDetailSerializer
     permission_classes = [IsAuthorOrReadOnly]
 
     def update(self, request, *args, **kwargs):
+        """
+        Custom update method handling complex image operations.
+
+        Processes three types of image operations in a single transaction:
+        1. Updates metadata for existing images
+        2. Creates new images from uploaded files
+        3. Deletes specified images
+
+        Uses parallel arrays from FormData to associate files with metadata.
+        """
         instance = self.get_object()
 
+        # Place metadata
         serializer_data = {
             "name": request.data.get("name"),
             "subtitle": request.data.get("subtitle"),
@@ -76,6 +99,7 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
             "rating": request.data.get("rating"),
         }
 
+        # Existing Images
         existing_image_ids = request.data.getlist("existing_images_ids")
         existing_image_captions = request.data.getlist("existing_images_captions")
         existing_image_thumbnails = request.data.getlist("existing_images_thumbnails")
@@ -90,10 +114,12 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
                 except PlaceImage.DoesNotExist:
                     pass
 
+        # Images to delete
         images_to_delete = request.data.getlist("images_to_delete")
         if images_to_delete:
             PlaceImage.objects.filter(id__in=images_to_delete, place=instance).delete()
 
+        # New Images
         image_files = request.FILES.getlist("images_files")
         image_captions = request.data.getlist("images_captions")
         image_thumbnails = request.data.getlist("images_thumbnails")
@@ -118,6 +144,7 @@ class PlaceDetailView(generics.RetrieveUpdateDestroyAPIView):
                     is_thumbnail=image_thumbnails[i] == "true",
                 )
 
+        # Validate and update Place instance
         serializer = self.get_serializer(instance, data=serializer_data, partial=True)
         if serializer.is_valid():
             self.perform_update(serializer)

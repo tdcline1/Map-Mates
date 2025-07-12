@@ -18,6 +18,17 @@ export const useAuth = () => {
   return context;
 };
 
+/**
+ * Authentication Context Provider
+ *
+ * Manages JWT-based authentication state across the application.
+ * Handles token validation, refresh, and automatic session management.
+ *
+ * Features:
+ * - Automatic token refresh before expiration
+ * - Persistent authentication state
+ * - Secure token storage and cleanup
+ */
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
@@ -25,6 +36,11 @@ export const AuthProvider = ({ children }) => {
     isLoading: true,
   });
 
+  /**
+   * Validates JWT token expiration
+   * @param {string} token - JWT token to validate
+   * @returns {boolean} - True if token is valid and not expired
+   */
   const isTokenValid = (token) => {
     try {
       const decoded = jwtDecode(token);
@@ -42,6 +58,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem(STORAGE_KEYS.USERNAME);
   };
 
+  /**
+   * Attempts to refresh access token using refresh token
+   * @returns {string|null} - New access token or null if refresh fails
+   */
   const refreshToken = async () => {
     const refresh = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
     if (!refresh) {
