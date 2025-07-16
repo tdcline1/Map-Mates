@@ -1,46 +1,47 @@
 # 🌎 MapMates
 
-## Overview
-
-MapMates is a full-stack web application that allows authenticated users to share and discover travel destinations. Built with a React frontend and a Django REST Framework (DRF) backend, the app features an interactive Mapbox GL map at its core. The user interface is designed with a clean, modal-first approach, creating a seamless experience for exploring and adding new locations.
+A full-stack web application that allows users to share and discover travel destinations on an interactive Mapbox GL map. Built with a React frontend and a Django REST Framework (DRF) backend.
 
 ***
 
 ## ✨ Features
 
-* **Interactive Map:** A dynamic Mapbox map that displays all user-submitted travel destinations.
+* **Interactive Map:** A dynamic MapboxGL map that displays all user-submitted travel destinations.
 * **User Authentication:** Secure user registration and login using JWT (JSON Web Tokens).
-* **Create & Share:** Authenticated users can add new places, including descriptions and images.
+* **Create & Share:** Authenticated users can add and edit places, including descriptions and images.
 * **Explore Destinations:** Clicking on a map marker opens a detailed modal view of the location with a gallery of images.
-* **Seamless UI:** A modal-based interface layered on top of the map for an uninterrupted user flow.
+
+***
+
+<img width="1457" alt="image" src="https://github.com/user-attachments/assets/defe6935-d7b6-4568-9842-6eaca77e0124" />
+
+## 🎥 Demo
+Watch a [demo video](https://www.linkedin.com/feed/update/urn:li:activity:7350335637318787072/?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A7350335637318787072%29) showcasing the interactive map, place creation, and authentication features.
 
 ***
 
 ## 🛠️ Technical Implementation
 
-### 1. Authentication & Authorization
+### 1. Authentication & Authorization: JWT-based security
 
-Authentication is handled via token-based security using `djangorestframework-simplejwt`.
-
-* **Backend:** The DRF backend provides endpoints for user registration, login, and logout, built upon a `CustomUser` model for future scalability.
-* **Frontend:** The React application centralizes authentication state management using **React Context**. This approach avoids prop drilling and provides a single source of truth for the user's authentication status. The context manages:
-    * JWT token storage and validation.
-    * An automatic token refresh mechanism using an Axios interceptor. When an access token expires, the interceptor seamlessly requests a new one with the refresh token.
-    * A periodic interval to proactively refresh tokens before they expire.
+* **Backend:** `djangorestframework-simplejwt`
+* **Frontend:** 
+  - React Context as single source of truth for authentication, distribute state and eliminate prop drilling. 
+  - Attach tokens and handle request failure token refresh via Axios interceptors.
+  - Proactive token refresh to maintain seamless user sessions.
 
 ### 2. Interactive Map with Mapbox GL
 
-The core of MapMates is its interactive map, powered by **Mapbox GL**.
+Interactive map powered by [Mapbox GL](https://docs.mapbox.com/mapbox-gl-js/api/)
 
 * **Performance:** The map component remains mounted in the background to prevent re-initialization, delivering a smooth user experience and limiting api usage costs.
-* **Security:** The Mapbox API token is securely managed using environment variables, and the tokens are scoped to only allow requests from trusted domains.
 * **Dynamic Markers:** Markers on the map are dynamically generated from location data fetched from the backend. Clicking a marker triggers a modal with detailed information and images.
 
 ### 3. Backend API & Data Handling
 
 The backend was built to handle complex data relationships, especially between places and their associated images.
 
-* **Nested Serializers:** The most intricate part of the backend involves nested serializers for the `Place` and `PlaceImage` models.
+* **Nested Serializers:** for the `Place` and `PlaceImage` models.
     * For **read operations**, places are serialized into **GeoJSON** format, which is optimized for rendering on Mapbox. This includes essential popup information like the title and a thumbnail image.
     * For **write operations** (create/update), the application accepts `multipart/FormData` to handle image file uploads alongside textual data. A custom `.update()` method in the `PlaceDetailView` was implemented to correctly process this data, distinguishing between new, existing, and removed images.
 
@@ -59,21 +60,9 @@ The React frontend includes robust form handling to accommodate both creating ne
 
 ***
 
-## 🚀 Performance & Optimization
-
-* **Efficient Database Queries:** The use of `select_related` and `prefetch_related` significantly reduces the database load.
-* **Optimized Map Rendering:** By keeping the Mapbox map persistently mounted, the application avoids the performance cost of frequent re-initializations.
-* **Minimal Dependencies:** A deliberate choice to use a minimal number of third-party libraries helps maintain control over performance and bundle size.
-
-***
-
 ## ✅ Testing & Reliability
 
-The backend's reliability is ensured through a suite of unit and integration tests written using Django's `TestCase` and DRF's `APITestCase`. These tests cover:
-
-* Model creation and validation.
-* API view responses and HTTP status codes.
-* Serializer logic, including nested create and update operations.
+A GitHub Actions CI/CD workflow has been implemented to lint and test the most vital functionality, specifically the Edit Place workflow, using Factory Boy, APIClient, and pytest to ensure consistent code quality and functionality.
 
 ***
 
@@ -84,6 +73,8 @@ The backend's reliability is ensured through a suite of unit and integration tes
 * **Database:** PostgreSQL
 * **Mapping:** Mapbox GL
 * **Authentication:** djangorestframework-simplejwt
+* **CI/CD**: GitHub Actions
+* **Testing**: pytest, Factory Boy, DRF APITestCase
 
 ***
 
@@ -137,5 +128,3 @@ The backend's reliability is ensured through a suite of unit and integration tes
     ```
 
 The application will be accessible at the development URL provided by the React development server (usually `http://localhost:3000`).
-<img width="1457" alt="image" src="https://github.com/user-attachments/assets/defe6935-d7b6-4568-9842-6eaca77e0124" />
-
